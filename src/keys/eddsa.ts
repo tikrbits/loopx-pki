@@ -4,10 +4,10 @@ import {oids} from '@artlab/crypto/encoding/oids';
 import {asn1} from '@artlab/crypto/encoding/asn1';
 import {x509} from '@artlab/crypto/encoding/x509';
 import {algs} from '../algs';
-import {PkixPrivateKey, PkixPublicKey} from './key';
+import {AbstractPrivateKey, AbstractPublicKey} from './key';
 import {assert} from '../utils';
 
-export class PkixEDDSAPublicKey extends PkixPublicKey {
+export class EDDSAPublicKey extends AbstractPublicKey {
   constructor(algo: Asym<any, any> | string, key: Buffer) {
     if (typeof algo === 'string') {
       algo = algs.getAsym(algo);
@@ -29,7 +29,7 @@ export class PkixEDDSAPublicKey extends PkixPublicKey {
   }
 }
 
-export class PkixEDDSAPrivateKey extends PkixPrivateKey {
+export class EDDSAPrivateKey extends AbstractPrivateKey {
   constructor(algo: Asym<any, any> | string, key?: Buffer | null) {
     if (typeof algo === 'string') {
       algo = algs.getAsym(algo);
@@ -46,10 +46,7 @@ export class PkixEDDSAPrivateKey extends PkixPrivateKey {
 
   generatePublicKey() {
     assert(this.key);
-    return new PkixEDDSAPublicKey(
-      this.asym,
-      this.asym.publicKeyCreate(this.key!),
-    );
+    return new EDDSAPublicKey(this.asym, this.asym.publicKeyCreate(this.key!));
   }
 
   import(raw: Buffer): this {

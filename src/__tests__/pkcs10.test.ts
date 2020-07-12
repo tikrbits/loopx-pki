@@ -1,13 +1,13 @@
 import {assert} from '@artlab/bsert';
 import {CertificationRequest} from '../pkcs10';
-import {PkixCertificationRequest} from '../builders';
-import {PkixECDSAPrivateKey} from '../keys';
+import {ConfigurableCertificationRequest} from '../csr';
+import {ECDSAPrivateKey} from '../keys';
 import {readFixtureAsString} from './support';
 
 describe('pkcs10', function () {
   it('should sign', function () {
-    const key = new PkixECDSAPrivateKey('p256');
-    const csr = new PkixCertificationRequest({
+    const key = new ECDSAPrivateKey('p256');
+    const csr = new ConfigurableCertificationRequest({
       subject: [
         {
           id: 'commonName',

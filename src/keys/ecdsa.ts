@@ -6,9 +6,9 @@ import {x509} from '@artlab/crypto/encoding/x509';
 import {Asym, ECDSA} from '@artlab/crypto/types';
 import {algs} from '../algs';
 import {assert} from '../utils';
-import {PkixPrivateKey, PkixPublicKey} from './key';
+import {AbstractPrivateKey, AbstractPublicKey} from './key';
 
-export class PkixECDSAPublicKey extends PkixPublicKey {
+export class ECDSAPublicKey extends AbstractPublicKey {
   constructor(algo: Asym<any, any> | string, key: Buffer) {
     if (typeof algo === 'string') {
       algo = algs.getAsym(algo);
@@ -30,7 +30,7 @@ export class PkixECDSAPublicKey extends PkixPublicKey {
   }
 }
 
-export class PkixECDSAPrivateKey extends PkixPrivateKey {
+export class ECDSAPrivateKey extends AbstractPrivateKey {
   constructor(algo: Asym<any, any> | string, key?: Buffer | null) {
     if (typeof algo === 'string') {
       algo = algs.getAsym(algo);
@@ -45,9 +45,9 @@ export class PkixECDSAPrivateKey extends PkixPrivateKey {
     return <ECDSA>this._asym;
   }
 
-  generatePublicKey(compress?: boolean): PkixECDSAPublicKey {
+  generatePublicKey(compress?: boolean): ECDSAPublicKey {
     assert(this.key);
-    return new PkixECDSAPublicKey(
+    return new ECDSAPublicKey(
       this.asym,
       this.asym.publicKeyCreate(this.key!, compress),
     );

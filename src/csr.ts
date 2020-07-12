@@ -1,44 +1,43 @@
 import {HashCtor} from '@artlab/crypto/types';
 import {pkcs10} from '@artlab/crypto/encoding/pkcs10';
+import {EMPTY, AttrProps, RDNs, SignatureAlgorithm} from './commons';
 import {
-  EMPTY,
-  PkixAttrProps,
-  PkixRDNs,
-  PkixSignatureAlgorithm,
-} from './commons';
-import {createPublicKeyFromSPKI, PkixPrivateKey, PkixPublicKey} from '../keys';
-import {CertificationRequest} from '../pkcs10';
-import {assert} from '../utils';
+  createPublicKeyFromSPKI,
+  AbstractPrivateKey,
+  AbstractPublicKey,
+} from './keys';
+import {CertificationRequest} from './pkcs10';
+import {assert} from './utils';
 
-export interface PkixCertificationRequestParams {
-  subject?: PkixAttrProps[];
-  pubkey?: PkixPublicKey;
+export interface ConfigurableCertificationRequestParams {
+  subject?: AttrProps[];
+  pubkey?: AbstractPublicKey;
 }
 
-export class PkixCertificationRequest {
+export class ConfigurableCertificationRequest {
   version: number;
-  subject: PkixRDNs;
-  pubkey: PkixPublicKey;
+  subject: RDNs;
+  pubkey: AbstractPublicKey;
 
-  signatureAlgorithm: PkixSignatureAlgorithm;
+  signatureAlgorithm: SignatureAlgorithm;
   signature: Buffer;
 
   static fromPEM(data: Buffer | string) {
-    return new PkixCertificationRequest().fromPEM(data);
+    return new ConfigurableCertificationRequest().fromPEM(data);
   }
 
   static fromPKCS10(req: pkcs10.CertificationRequest) {
-    return new PkixCertificationRequest().fromPKCS10(req);
+    return new ConfigurableCertificationRequest().fromPKCS10(req);
   }
 
-  constructor(params?: PkixCertificationRequestParams) {
+  constructor(params?: ConfigurableCertificationRequestParams) {
     params = params ?? {};
 
     this.version = 2;
-    this.subject = new PkixRDNs(params.subject);
+    this.subject = new RDNs(params.subject);
     this.pubkey = params.pubkey!;
 
-    this.signatureAlgorithm = new PkixSignatureAlgorithm();
+    this.signatureAlgorithm = new SignatureAlgorithm();
     this.signature = EMPTY;
   }
 
@@ -55,10 +54,10 @@ export class PkixCertificationRequest {
     const info = req.certificationRequestInfo;
 
     this.version = info.version.toNumber();
-    this.subject = PkixRDNs.fromASN1(info.subject);
+    this.subject = RDNs.fromASN1(info.subject);
     this.pubkey = createPublicKeyFromSPKI(info.subjectPublicKeyInfo);
 
-    this.signatureAlgorithm = PkixSignatureAlgorithm.fromASN1(
+    this.signatureAlgorithm = SignatureAlgorithm.fromASN1(
       req.signatureAlgorithm,
     );
     this.signature = req.signature.value;
@@ -66,7 +65,7 @@ export class PkixCertificationRequest {
   }
 
   build(
-    key?: PkixPrivateKey,
+    key?: AbstractPrivateKey,
     hash: string | HashCtor = 'sha256',
     compressPubkey?: boolean,
   ) {

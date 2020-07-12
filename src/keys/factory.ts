@@ -5,10 +5,10 @@ import {pem} from '@artlab/crypto/encoding/pem';
 import {pemcrypt} from '@artlab/crypto/encoding/pemcrypt';
 import {Asym, ECDSA} from '@artlab/crypto/types';
 import {algs, getAsymType} from '../algs';
-import {PkixPrivateKey} from './key';
-import {PkixRSAPrivateKey, PkixRSAPublicKey} from './rsa';
-import {PkixECDSAPrivateKey, PkixECDSAPublicKey} from './ecdsa';
-import {PkixEDDSAPrivateKey, PkixEDDSAPublicKey} from './eddsa';
+import {AbstractPrivateKey} from './key';
+import {RSAPrivateKey, RSAPublicKey} from './rsa';
+import {ECDSAPrivateKey, ECDSAPublicKey} from './ecdsa';
+import {EDDSAPrivateKey, EDDSAPublicKey} from './eddsa';
 
 /** Public Key Generations **/
 export function createPublicKey(
@@ -21,14 +21,14 @@ export function createPublicKey(
 
   switch (type) {
     case 'rsa':
-      return new PkixRSAPublicKey(key);
+      return new RSAPublicKey(key);
     case 'ecdsa':
-      return new PkixECDSAPublicKey(
+      return new ECDSAPublicKey(
         asym,
         (<ECDSA>asym).publicKeyConvert(key, compress),
       );
     case 'eddsa':
-      return new PkixEDDSAPublicKey(asym, key);
+      return new EDDSAPublicKey(asym, key);
     default:
       throw new Error(`Unsupported algorithm: ${asym.id}`);
   }
@@ -43,12 +43,11 @@ export function createPublicKeyFromASN1(
 }
 
 export function createPublicKeyFromPKCS1(raw: Buffer) {
-  return new PkixRSAPublicKey(raw);
+  return new RSAPublicKey(raw);
 }
 
 export function createPublicKeyFromSPKI(
   input: Buffer | x509.SubjectPublicKeyInfo,
-  compress?: boolean,
 ) {
   let spki: x509.SubjectPublicKeyInfo;
   if (Buffer.isBuffer(input)) {
@@ -96,17 +95,17 @@ export function createPublicKeyFromPEM(data: string | Buffer) {
 export function createPrivateKey(
   algo: string | Asym<any, any>,
   key?: Buffer | null,
-): PkixPrivateKey {
+): AbstractPrivateKey {
   const asym = typeof algo === 'string' ? algs.getAsym(algo) : algo;
   const type = getAsymType(asym);
 
   switch (type) {
     case 'rsa':
-      return new PkixRSAPrivateKey(key);
+      return new RSAPrivateKey(key);
     case 'ecdsa':
-      return new PkixECDSAPrivateKey(asym, key);
+      return new ECDSAPrivateKey(asym, key);
     case 'eddsa':
-      return new PkixEDDSAPrivateKey(asym, key);
+      return new EDDSAPrivateKey(asym, key);
     default:
       throw new Error(`Unsupported algorithm: ${asym.id}`);
   }
@@ -122,7 +121,7 @@ export function createPrivateKeyFromASN1(
 }
 
 export function createPrivateKeyFromPKCS1(raw: Buffer) {
-  return new PkixRSAPrivateKey(raw);
+  return new RSAPrivateKey(raw);
 }
 
 export function createPrivateKeyFromPKCS8(raw: Buffer) {
@@ -148,7 +147,7 @@ export function createPrivateKeyFromPKCS8(raw: Buffer) {
 export function createPrivateKeyFromPEM(
   data: string | Buffer,
   passphrase?: string,
-): PkixPrivateKey {
+): AbstractPrivateKey {
   if (Buffer.isBuffer(data)) {
     data = data.toString('utf8');
   }

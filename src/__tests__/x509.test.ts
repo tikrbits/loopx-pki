@@ -2,7 +2,7 @@ import '../setup/all';
 import {assert} from '@artlab/bsert';
 import {oids} from '@artlab/crypto/encoding/oids';
 import {createPrivateKey} from '../keys';
-import {PkixCertificate} from '../builders';
+import {ConfigurableCertificate} from '../crt';
 
 const ExampleAttrs = [
   {
@@ -39,7 +39,7 @@ describe('x509/Certificate', function () {
   describe('#basicConstraints', function () {
     it('should get basicConstraints undefined without basic constraints extension', function () {
       const key = createPrivateKey('p256');
-      const pc = new PkixCertificate({
+      const pc = new ConfigurableCertificate({
         pubkey: key.generatePublicKey(),
         subject: ExampleAttrs,
       });
@@ -50,7 +50,7 @@ describe('x509/Certificate', function () {
 
     it('should get basicConstraints with basic constraints extension', function () {
       const key = createPrivateKey('p256');
-      const pc = new PkixCertificate({
+      const pc = new ConfigurableCertificate({
         pubkey: key.generatePublicKey(),
         subject: ExampleAttrs,
         extensions: [
@@ -68,7 +68,7 @@ describe('x509/Certificate', function () {
   describe('#isCA', function () {
     it('should return false with CA undefined basic constraints extension', function () {
       const key = createPrivateKey('p256');
-      const pc = new PkixCertificate({
+      const pc = new ConfigurableCertificate({
         pubkey: key.generatePublicKey(),
         subject: ExampleAttrs,
         extensions: [
@@ -84,7 +84,7 @@ describe('x509/Certificate', function () {
 
     it('should return false with CA disabled basic constraints extension', function () {
       const key = createPrivateKey('p256');
-      const pc = new PkixCertificate({
+      const pc = new ConfigurableCertificate({
         pubkey: key.generatePublicKey(),
         subject: ExampleAttrs,
         extensions: [
@@ -101,7 +101,7 @@ describe('x509/Certificate', function () {
 
     it('should return true with CA enabled in basic constraints extension', function () {
       const key = createPrivateKey('p256');
-      const pc = new PkixCertificate({
+      const pc = new ConfigurableCertificate({
         pubkey: key.generatePublicKey(),
         subject: ExampleAttrs,
         extensions: [
@@ -120,7 +120,7 @@ describe('x509/Certificate', function () {
   describe('#maxPathLen', function () {
     it('should return undefined with maxLenPath undefined in basic constraints extension', function () {
       const key = createPrivateKey('p256');
-      const pc = new PkixCertificate({
+      const pc = new ConfigurableCertificate({
         pubkey: key.generatePublicKey(),
         subject: ExampleAttrs,
         extensions: [
@@ -136,7 +136,7 @@ describe('x509/Certificate', function () {
 
     it('should return 0 with maxLenPath specified to 0 in basic constraints extension', function () {
       const key = createPrivateKey('p256');
-      const pc = new PkixCertificate({
+      const pc = new ConfigurableCertificate({
         pubkey: key.generatePublicKey(),
         subject: ExampleAttrs,
         extensions: [
@@ -153,7 +153,7 @@ describe('x509/Certificate', function () {
 
     it('should return number with maxLenPath specified in basic constraints extension', function () {
       const key = createPrivateKey('p256');
-      const pc = new PkixCertificate({
+      const pc = new ConfigurableCertificate({
         pubkey: key.generatePublicKey(),
         subject: ExampleAttrs,
         extensions: [

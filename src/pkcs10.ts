@@ -2,7 +2,7 @@ import {pkcs10} from '@artlab/crypto/encoding/pkcs10';
 import {HashCtor} from '@artlab/crypto/types';
 import {oids} from '@artlab/crypto/encoding/oids';
 import {algs} from './algs';
-import {createPublicKeyFromSPKI, PkixPrivateKey} from './keys';
+import {createPublicKeyFromSPKI, AbstractPrivateKey} from './keys';
 import {resolveSignatureAlgorithmOID} from './x509';
 
 export class CertificationRequest extends pkcs10.CertificationRequest {
@@ -15,7 +15,7 @@ export class CertificationRequest extends pkcs10.CertificationRequest {
     return <T>(<unknown>new CertificationRequest().fromPEM(str));
   }
 
-  sign(key: PkixPrivateKey, hash: string | HashCtor = 'sha256') {
+  sign(key: AbstractPrivateKey, hash: string | HashCtor = 'sha256') {
     hash = typeof hash === 'string' ? algs.getHash(hash) : hash;
     const oid = resolveSignatureAlgorithmOID(key, hash);
     const raw = this.certificationRequestInfo.encode();

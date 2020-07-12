@@ -5,7 +5,7 @@ import {pemcrypt} from '@artlab/crypto/encoding/pemcrypt';
 import {algs} from '../algs';
 import {assert} from '../utils';
 
-export abstract class PkixPublicKey {
+export abstract class AbstractPublicKey {
   protected _asym: Asym<any, any>;
   protected _key: Buffer;
 
@@ -52,7 +52,7 @@ export abstract class PkixPublicKey {
   }
 }
 
-export abstract class PkixPrivateKey {
+export abstract class AbstractPrivateKey {
   protected _asym: Asym<any, any>;
   protected _key: Buffer;
 
@@ -85,7 +85,7 @@ export abstract class PkixPrivateKey {
    */
   abstract toPKCS8(compress?: boolean): Buffer;
 
-  abstract generatePublicKey(compress?: boolean): PkixPublicKey;
+  abstract generatePublicKey(compress?: boolean): AbstractPublicKey;
 
   // Import from ASN.1 format
   abstract import(raw: Buffer): this;

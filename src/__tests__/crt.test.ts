@@ -8,7 +8,7 @@ import {
 } from './fixtures/certs.pem';
 import {createPrivateKeyFromPEM, createPublicKeyFromPEM} from '../keys';
 import {Certificate} from '../x509';
-import {PkixCertificate} from '../builders';
+import {ConfigurableCertificate} from '../crt';
 import {CAStore} from '../castore';
 
 const ExampleAttrs = [
@@ -96,7 +96,7 @@ describe('crt', function () {
       pubkey: createPublicKeyFromPEM(pem_sha1.publicKey),
     };
 
-    const pc = new PkixCertificate({
+    const pc = new ConfigurableCertificate({
       pubkey: keys.pubkey,
       serialNumber: '01',
       subject: ExampleAttrs,
@@ -130,14 +130,14 @@ describe('crt', function () {
 
     const notBefore = new Date('2050-01-02');
 
-    let pc = new PkixCertificate({
+    let pc = new ConfigurableCertificate({
       pubkey: keys.pubkey,
       serialNumber: '01',
       subject: ExampleAttrs,
       notBefore,
     });
 
-    pc = PkixCertificate.fromX509(pc.build(keys.privkey));
+    pc = ConfigurableCertificate.fromX509(pc.build(keys.privkey));
     assert.deepEqual(pc.validity.notBefore, notBefore);
     assert.deepEqual(pc.validity.notAfter, new Date('2051-01-02'));
   });
@@ -148,7 +148,7 @@ describe('crt', function () {
       pubkey: createPublicKeyFromPEM(pem_sha1.publicKey),
     };
 
-    const pc = new PkixCertificate({
+    const pc = new ConfigurableCertificate({
       pubkey: keys.pubkey,
       serialNumber: '01',
       subject: ExampleAttrs,

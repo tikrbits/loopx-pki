@@ -5,10 +5,10 @@ import {pkcs1} from '@artlab/crypto/encoding/pkcs1';
 import {pkcs8} from '@artlab/crypto/encoding/pkcs8';
 import {RSA} from '@artlab/crypto/types';
 import {algs} from '../algs';
-import {PkixPrivateKey, PkixPublicKey} from './key';
+import {AbstractPrivateKey, AbstractPublicKey} from './key';
 import {assert} from '../utils';
 
-export class PkixRSAPublicKey extends PkixPublicKey {
+export class RSAPublicKey extends AbstractPublicKey {
   constructor(key: Buffer) {
     super(algs.getAsym('RSA'), key);
   }
@@ -26,7 +26,7 @@ export class PkixRSAPublicKey extends PkixPublicKey {
   }
 }
 
-export class PkixRSAPrivateKey extends PkixPrivateKey {
+export class RSAPrivateKey extends AbstractPrivateKey {
   constructor(bits?: number, exponent?: number);
   constructor(key?: Buffer | null);
   constructor(bits?: number | Buffer | null, exponent?: number) {
@@ -47,7 +47,7 @@ export class PkixRSAPrivateKey extends PkixPrivateKey {
 
   generatePublicKey() {
     assert(this.key);
-    return new PkixRSAPublicKey(this.asym.publicKeyCreate(this.key!));
+    return new RSAPublicKey(this.asym.publicKeyCreate(this.key!));
   }
 
   import(raw: Buffer): this {

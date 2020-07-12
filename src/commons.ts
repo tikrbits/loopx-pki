@@ -4,7 +4,7 @@ import {x509} from '@artlab/crypto/encoding/x509';
 
 export const EMPTY = Buffer.allocUnsafe(0);
 
-export const PkixAttrNameShortToFull: Record<string, string> = {
+export const AttrNameShortToFull: Record<string, string> = {
   CN: 'COMMONNAME',
   C: 'COUNTRY',
   L: 'LOCALITY',
@@ -14,11 +14,11 @@ export const PkixAttrNameShortToFull: Record<string, string> = {
   E: 'EMAIL',
 };
 
-export const PkixAttrNameFullToShort: Record<string, string> = Object.keys(
-  PkixAttrNameShortToFull,
-).reduce((o, k) => ({[k]: PkixAttrNameShortToFull[k], ...o}), {});
+export const AttrNameFullToShort: Record<string, string> = Object.keys(
+  AttrNameShortToFull,
+).reduce((o, k) => ({[k]: AttrNameShortToFull[k], ...o}), {});
 
-export class PkixValidity {
+export class Validity {
   notBefore: Date;
   notAfter: Date;
 
@@ -30,7 +30,7 @@ export class PkixValidity {
   static fromASN1(validity: x509.Validity) {
     const notBefore = new Date(validity.notBefore.node.value * 1000);
     const notAfter = new Date(validity.notAfter.node.value * 1000);
-    return new PkixValidity({notBefore, notAfter});
+    return new Validity({notBefore, notAfter});
   }
 
   toASN1(validity?: x509.Validity) {
@@ -41,34 +41,34 @@ export class PkixValidity {
   }
 }
 
-export interface PkixAttrProps {
+export interface AttrProps {
   id: string;
   value: any;
   type?: string;
 }
 
-export class PkixAttr {
+export class Attr {
   id: string;
 
   value: any;
   type?: string;
 
-  constructor(options: PkixAttrProps);
+  constructor(options: AttrProps);
   constructor(id: string, value: any, type?: string);
-  constructor(id: string | PkixAttrProps, value?: any, type?: string) {
+  constructor(id: string | AttrProps, value?: any, type?: string) {
     if (typeof id !== 'string') {
       type = id.type;
       value = id.value;
       id = id.id;
     }
     const idOrName = id.toUpperCase();
-    this.id = oids.foid(PkixAttrNameShortToFull[idOrName] || idOrName);
+    this.id = oids.foid(AttrNameShortToFull[idOrName] || idOrName);
     this.value = value;
     this.type = type;
   }
 
   static fromASN1(attribute: x509.Attribute) {
-    return new PkixAttr(
+    return new Attr(
       attribute.id.toString(),
       attribute.value.node.value,
       attribute.value.node.constructor.name,
@@ -89,19 +89,19 @@ export class PkixAttr {
   }
 
   get shortName() {
-    return PkixAttrNameFullToShort[this.name];
+    return AttrNameFullToShort[this.name];
   }
 }
 
-export class PkixRDNs extends Array<PkixAttr> {
-  constructor(attrs?: PkixAttrProps[]) {
+export class RDNs extends Array<Attr> {
+  constructor(attrs?: AttrProps[]) {
     super();
     attrs = attrs ?? [];
-    this.push(...attrs.map(attr => new PkixAttr(attr)));
+    this.push(...attrs.map(attr => new Attr(attr)));
   }
 
   static fromASN1(rdns: x509.RDNSequence) {
-    return new PkixRDNs().fromASN1(rdns);
+    return new RDNs().fromASN1(rdns);
   }
 
   fromASN1(rdns: x509.RDNSequence) {
@@ -131,7 +131,7 @@ export class PkixRDNs extends Array<PkixAttr> {
     return rdns;
   }
 
-  _find(filter: string): [number, PkixAttr?] {
+  _find(filter: string): [number, Attr?] {
     filter = filter.toUpperCase();
     for (let i = 0; i < this.length; i++) {
       const item = this[i];
@@ -155,11 +155,11 @@ export class PkixRDNs extends Array<PkixAttr> {
     return found;
   }
 
-  add(attribute: x509.Attribute): PkixAttr;
-  add(id: string, value: any): PkixAttr;
+  add(attribute: x509.Attribute): Attr;
+  add(id: string, value: any): Attr;
   add(id: string | x509.Attribute, value?: any) {
     const attr =
-      typeof id === 'string' ? new PkixAttr(id, value) : PkixAttr.fromASN1(id);
+      typeof id === 'string' ? new Attr(id, value) : Attr.fromASN1(id);
     this.push(attr);
     return attr;
   }
@@ -183,7 +183,7 @@ export class PkixRDNs extends Array<PkixAttr> {
   }
 }
 
-export class PkixSignatureAlgorithm {
+export class SignatureAlgorithm {
   algorithm: string;
 
   constructor(algorithm?: string) {
@@ -191,7 +191,7 @@ export class PkixSignatureAlgorithm {
   }
 
   static fromASN1(ai: x509.AlgorithmIdentifier) {
-    return new PkixSignatureAlgorithm(ai.algorithm.toString());
+    return new SignatureAlgorithm(ai.algorithm.toString());
   }
 
   toASN1(ai?: x509.AlgorithmIdentifier) {

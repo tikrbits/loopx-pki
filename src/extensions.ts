@@ -4,23 +4,23 @@ import {asn1} from '@artlab/crypto/encoding/asn1';
 import {x509} from '@artlab/crypto/encoding/x509';
 import {assert} from './utils';
 
-export interface PkixCertExtOptions {
+export interface ExtensionOptions {
   critical?: boolean;
   value?: Buffer;
 
   [prop: string]: any;
 }
 
-export interface PkixCertExtParams extends PkixCertExtOptions {
+export interface ExtensionParams extends ExtensionOptions {
   id: string;
 }
 
-export class PkixCertExt {
+export class Extension {
   static id = oids.NONE;
 
   critical: boolean;
 
-  constructor(params: PkixCertExtParams) {
+  constructor(params: ExtensionParams) {
     this.check(params);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const {id, critical, value, ...others} = params;
@@ -32,17 +32,17 @@ export class PkixCertExt {
     }
   }
 
-  protected check(params: PkixCertExtParams) {
+  protected check(params: ExtensionParams) {
     assert(
       oids.foid(params.id) === this.id,
       `'params.id'(${params.id}) is not match with current extension's id ${
-        (<typeof PkixCertExt>this.constructor).id
+        (<typeof Extension>this.constructor).id
       }`,
     );
   }
 
   get id() {
-    return (<typeof PkixCertExt>this.constructor).id;
+    return (<typeof Extension>this.constructor).id;
   }
 
   get name() {
@@ -58,16 +58,16 @@ export class PkixCertExt {
   }
 }
 
-export class PkixCertExtGeneric extends PkixCertExt {
+export class GenericExtension extends Extension {
   protected _id: string;
   protected _value: Buffer;
 
-  constructor(params: PkixCertExtParams) {
+  constructor(params: ExtensionParams) {
     super(params);
     this._id = oids.foid(params.id);
   }
 
-  protected check(params: PkixCertExtParams) {
+  protected check(params: ExtensionParams) {
     assert(
       Buffer.isBuffer(params.value) && params.value.length > 0,
       'params.value is required and should not be empty',
@@ -87,7 +87,7 @@ export class PkixCertExtGeneric extends PkixCertExt {
   }
 }
 
-export interface PkixCertExtKeyUsageOptions extends PkixCertExtOptions {
+export interface KeyUsageExtensionOptions extends ExtensionOptions {
   digitalSignature?: boolean;
   nonRepudiation?: boolean;
   keyEncipherment?: boolean;
@@ -99,8 +99,8 @@ export interface PkixCertExtKeyUsageOptions extends PkixCertExtOptions {
   decipherOnly?: boolean;
 }
 
-export class PkixCertExtKeyUsage extends PkixCertExt
-  implements PkixCertExtKeyUsageOptions {
+export class KeyUsageExtension extends Extension
+  implements KeyUsageExtensionOptions {
   static id: string = oids.exts.KEY_USAGE;
 
   digitalSignature: boolean;
@@ -244,13 +244,13 @@ export class BasicConstraints extends asn1.Sequence {
   }
 }
 
-export interface PkixCertExtBasicConstraintsOptions extends PkixCertExtOptions {
+export interface BasicConstraintsExtensionOptions extends ExtensionOptions {
   ca?: boolean;
   maxPathLen?: number;
 }
 
-export class PkixCertExtBasicConstraints extends PkixCertExt
-  implements PkixCertExtBasicConstraintsOptions {
+export class BasicConstraintsExtension extends Extension
+  implements BasicConstraintsExtensionOptions {
   static id: string = oids.exts.BASIC_CONSTRAINTS;
 
   ca?: boolean;
@@ -270,23 +270,23 @@ export class PkixCertExtBasicConstraints extends PkixCertExt
   }
 }
 
-type PkixCertExtClass = typeof PkixCertExt;
+type PkixCertExtClass = typeof Extension;
 
 const PkixCertExtensionClasses: PkixCertExtClass[] = [
-  PkixCertExtKeyUsage,
-  PkixCertExtBasicConstraints,
+  KeyUsageExtension,
+  BasicConstraintsExtension,
 ];
 
-export function createExtension(ext: PkixCertExtParams): PkixCertExt;
+export function createExtension(ext: ExtensionParams): Extension;
 export function createExtension(
   id: string,
-  options: Buffer | asn1.OctString | Partial<PkixCertExtOptions>,
-): PkixCertExt;
+  options: Buffer | asn1.OctString | Partial<ExtensionOptions>,
+): Extension;
 export function createExtension(
-  id: string | PkixCertExtParams,
-  options?: Buffer | asn1.OctString | Partial<PkixCertExtOptions>,
-): PkixCertExt {
-  let ext: PkixCertExtParams;
+  id: string | ExtensionParams,
+  options?: Buffer | asn1.OctString | Partial<ExtensionOptions>,
+): Extension {
+  let ext: ExtensionParams;
   if (typeof id === 'string') {
     // flat params
     assert(options, '`options` is required when id is string');
@@ -302,7 +302,7 @@ export function createExtension(
   const Ext =
     PkixCertExtensionClasses.find(
       cls => cls.id === ext.id || cls.id === oids.foid(ext.id),
-    ) ?? PkixCertExtGeneric;
+    ) ?? GenericExtension;
   return new Ext(ext);
 }
 
@@ -310,10 +310,10 @@ export function createExtension(
 //   return x.type === asn1.types.OCTSTRING;
 // }
 
-export class PkixCertExtensions {
-  protected _items: PkixCertExt[];
+export class Extensions {
+  protected _items: Extension[];
 
-  constructor(exts?: PkixCertExtParams[]) {
+  constructor(exts?: ExtensionParams[]) {
     this._items = [];
     if (exts) {
       this.add(exts);
@@ -321,7 +321,7 @@ export class PkixCertExtensions {
   }
 
   static fromASN1(extensions: x509.Extensions) {
-    const answer = new PkixCertExtensions();
+    const answer = new Extensions();
     for (const e of extensions.extensions) {
       answer.add({
         id: e.extnID.toString(),
@@ -347,24 +347,19 @@ export class PkixCertExtensions {
     return extensions;
   }
 
-  get items(): PkixCertExt[] {
+  get items(): Extension[] {
     return this._items;
   }
 
   add(
-    exts: PkixCertExt | PkixCertExt[] | PkixCertExtParams | PkixCertExtParams[],
+    exts: Extension | Extension[] | ExtensionParams | ExtensionParams[],
   ): void;
-  add(id: string, options: Buffer | Partial<PkixCertExtOptions>): void;
+  add(id: string, options: Buffer | Partial<ExtensionOptions>): void;
   add(
-    id:
-      | string
-      | PkixCertExt
-      | PkixCertExt[]
-      | PkixCertExtParams
-      | PkixCertExtParams[],
-    options?: Buffer | Partial<PkixCertExtOptions>,
+    id: string | Extension | Extension[] | ExtensionParams | ExtensionParams[],
+    options?: Buffer | Partial<ExtensionOptions>,
   ): void {
-    let exts: (PkixCertExt | PkixCertExtParams)[];
+    let exts: (Extension | ExtensionParams)[];
     if (typeof id === 'string') {
       // flat params
       assert(options, '`options` is required when id is string');
@@ -382,7 +377,7 @@ export class PkixCertExtensions {
     }
 
     for (const ext of exts) {
-      if (ext instanceof PkixCertExt) {
+      if (ext instanceof Extension) {
         this._items.push(ext);
       } else {
         this._items.push(createExtension(ext));

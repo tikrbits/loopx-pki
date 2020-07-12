@@ -5,17 +5,21 @@ import fs from 'fs-extra';
 import {HashCtor} from '@artlab/crypto';
 import {IssuerMisMatchError} from './errors';
 import {algs} from './algs';
-import {createPublicKeyFromSPKI, PkixPrivateKey, PkixPublicKey} from './keys';
-import {PkixCertExtBasicConstraints, PkixCertExtensions} from './extensions';
+import {
+  createPublicKeyFromSPKI,
+  AbstractPrivateKey,
+  AbstractPublicKey,
+} from './keys';
+import {BasicConstraintsExtension, Extensions} from './extensions';
 
 export class Certificate extends x509.Certificate {
-  protected _extensions: PkixCertExtensions;
+  protected _extensions: Extensions;
 
   get extensions() {
     if (this._extensions) {
       return this._extensions;
     }
-    return (this._extensions = PkixCertExtensions.fromASN1(
+    return (this._extensions = Extensions.fromASN1(
       this.tbsCertificate.extensions,
     ));
   }
@@ -24,7 +28,7 @@ export class Certificate extends x509.Certificate {
     if (!this.extensions || !this.extensions.items) {
       return;
     }
-    return <PkixCertExtBasicConstraints>(
+    return <BasicConstraintsExtension>(
       this.extensions.items.find(i => i.id === oids.exts.BASIC_CONSTRAINTS)
     );
   }
@@ -58,7 +62,7 @@ export class Certificate extends x509.Certificate {
    * @param key private key
    * @param hash signature algorithm
    */
-  sign(key: PkixPrivateKey, hash: string | HashCtor) {
+  sign(key: AbstractPrivateKey, hash: string | HashCtor) {
     hash = typeof hash === 'string' ? algs.getHash(hash) : hash;
     const oid = resolveSignatureAlgorithmOID(key, hash);
 
@@ -100,7 +104,7 @@ export class Certificate extends x509.Certificate {
 }
 
 export function resolveSignatureAlgorithmOID(
-  key: PkixPublicKey | PkixPrivateKey,
+  key: AbstractPublicKey | AbstractPrivateKey,
   hash: string | HashCtor,
 ) {
   hash = typeof hash === 'string' ? algs.getHash(hash) : hash;

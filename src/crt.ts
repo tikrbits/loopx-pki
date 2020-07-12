@@ -1,57 +1,53 @@
 import {HashCtor} from '@artlab/crypto';
 import {x509} from '@artlab/crypto/encoding/x509';
-
-import {Certificate, resolveSignatureAlgorithmOID} from '../x509';
-import {createPublicKeyFromSPKI, PkixPrivateKey, PkixPublicKey} from '../keys';
-import {dt} from '../utils';
-
-import {PkixCertExtensions, PkixCertExtParams} from '../extensions';
+import {Certificate, resolveSignatureAlgorithmOID} from './x509';
 import {
-  EMPTY,
-  PkixAttrProps,
-  PkixRDNs,
-  PkixSignatureAlgorithm,
-  PkixValidity,
-} from './commons';
+  createPublicKeyFromSPKI,
+  AbstractPrivateKey,
+  AbstractPublicKey,
+} from './keys';
+import {Extensions, ExtensionParams} from './extensions';
+import {dt} from './utils';
+import {EMPTY, AttrProps, RDNs, SignatureAlgorithm, Validity} from './commons';
 
 const DefaultSerialNumber = Buffer.from([0x01]);
 
-export interface PkixCertificateParams {
+export interface ConfigurableCertificateParams {
   serialNumber?: Buffer | string;
   notBefore?: Date;
   notAfter?: Date;
   duration?: string;
-  subject?: PkixAttrProps[];
-  issuer?: PkixAttrProps[];
+  subject?: AttrProps[];
+  issuer?: AttrProps[];
   subjectUniqueId?: Buffer;
   issuerUniqueId?: Buffer;
-  extensions?: PkixCertExtParams[];
-  pubkey?: PkixPublicKey;
+  extensions?: ExtensionParams[];
+  pubkey?: AbstractPublicKey;
 }
 
-export class PkixCertificate {
+export class ConfigurableCertificate {
   version: number;
   serialNumber: Buffer;
-  validity: PkixValidity;
-  subject: PkixRDNs;
+  validity: Validity;
+  subject: RDNs;
   subjectUniqueId?: Buffer;
-  issuer: PkixRDNs;
+  issuer: RDNs;
   issuerUniqueId?: Buffer;
-  extensions: PkixCertExtensions;
-  pubkey: PkixPublicKey;
+  extensions: Extensions;
+  pubkey: AbstractPublicKey;
 
-  signatureAlgorithm: PkixSignatureAlgorithm;
+  signatureAlgorithm: SignatureAlgorithm;
   signature: Buffer;
 
   static fromPEM(data: Buffer | string) {
-    return new PkixCertificate().fromPEM(data);
+    return new ConfigurableCertificate().fromPEM(data);
   }
 
   static fromX509(cert: x509.Certificate) {
-    return new PkixCertificate().fromX509(cert);
+    return new ConfigurableCertificate().fromX509(cert);
   }
 
-  constructor(params?: PkixCertificateParams) {
+  constructor(params?: ConfigurableCertificateParams) {
     params = params ?? {};
 
     let serialNumber: Buffer = DefaultSerialNumber;
@@ -72,15 +68,15 @@ export class PkixCertificate {
     this.subjectUniqueId = params.subjectUniqueId;
     this.issuerUniqueId = params.issuerUniqueId;
 
-    this.validity = new PkixValidity({notBefore, notAfter});
-    this.subject = new PkixRDNs(params.subject);
-    this.issuer = new PkixRDNs(params.issuer ?? params.subject);
-    this.extensions = new PkixCertExtensions(params.extensions);
+    this.validity = new Validity({notBefore, notAfter});
+    this.subject = new RDNs(params.subject);
+    this.issuer = new RDNs(params.issuer ?? params.subject);
+    this.extensions = new Extensions(params.extensions);
 
     this.pubkey = params.pubkey!;
 
     // SignatureAlgorithm
-    this.signatureAlgorithm = new PkixSignatureAlgorithm();
+    this.signatureAlgorithm = new SignatureAlgorithm();
 
     // Signature
     this.signature = EMPTY;
@@ -103,13 +99,13 @@ export class PkixCertificate {
     this.subjectUniqueId = tbs?.subjectUniqueID.value;
     this.issuerUniqueId = tbs?.issuerUniqueID.value;
 
-    this.validity = PkixValidity.fromASN1(tbs.validity);
-    this.subject = PkixRDNs.fromASN1(tbs.subject);
-    this.issuer = PkixRDNs.fromASN1(tbs.issuer);
-    this.extensions = PkixCertExtensions.fromASN1(tbs.extensions);
+    this.validity = Validity.fromASN1(tbs.validity);
+    this.subject = RDNs.fromASN1(tbs.subject);
+    this.issuer = RDNs.fromASN1(tbs.issuer);
+    this.extensions = Extensions.fromASN1(tbs.extensions);
 
     // SignatureAlgorithm
-    this.signatureAlgorithm = PkixSignatureAlgorithm.fromASN1(
+    this.signatureAlgorithm = SignatureAlgorithm.fromASN1(
       cert.signatureAlgorithm,
     );
 
@@ -119,10 +115,10 @@ export class PkixCertificate {
   }
 
   build(
-    key?: PkixPrivateKey,
+    key?: AbstractPrivateKey,
     hash: string | HashCtor = 'sha256',
     compressPubKey?: boolean,
-  ) {
+  ): Certificate {
     const cert = new Certificate();
     const tbc = cert.tbsCertificate;
 

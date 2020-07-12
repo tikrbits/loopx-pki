@@ -1,6 +1,6 @@
 import {CAStore} from './castore';
 import {Certificate} from './x509';
-import {PkixValidity} from './builders';
+import {Validity} from './commons';
 import {
   BadCertificate,
   CertificateExpired,
@@ -8,7 +8,7 @@ import {
   UnknownCA,
   UnsupportedCertificate,
 } from './errors';
-import {PkixCertExtensions} from './extensions';
+import {Extensions} from './extensions';
 
 export type VerifyCallback = (
   error: CertVerifyError | undefined,
@@ -24,7 +24,7 @@ export interface VerifyOptions {
 function verifyValidity(cert: Certificate, options: VerifyOptions) {
   const date = options.validityCheckDate;
   if (date) {
-    const validity = PkixValidity.fromASN1(cert.tbsCertificate.validity);
+    const validity = Validity.fromASN1(cert.tbsCertificate.validity);
     if (date < validity.notBefore || date > validity.notAfter) {
       return new CertificateExpired(
         'Certificate is not valid yet or has expired.',
@@ -93,9 +93,7 @@ function verifyWithParent(
 function verifyExtensions(cert: Certificate) {
   // supported extensions
   const supports = ['KEY_USAGE', 'BASIC_CONSTRAINTS'];
-  const extensions = PkixCertExtensions.fromASN1(
-    cert.tbsCertificate.extensions,
-  );
+  const extensions = Extensions.fromASN1(cert.tbsCertificate.extensions);
   for (const ext of extensions.items) {
     if (ext.critical && !supports.includes(ext.name)) {
       return new UnsupportedCertificate(
