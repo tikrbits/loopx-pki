@@ -86,7 +86,7 @@ export function createPublicKeyFromPEM(data: string | Buffer) {
     throw new Error('Invalid pem!');
   }
 
-  if (block.type == 'RSA PUBLIC KEY') {
+  if (block.type === 'RSA PUBLIC KEY') {
     return createPublicKeyFromPKCS1(block.data);
   }
   return createPublicKeyFromSPKI(block.data);
@@ -159,9 +159,11 @@ export function createPrivateKeyFromPEM(
     throw new Error('Invalid pem!');
   }
 
-  passphrase && pemcrypt.decrypt(block, passphrase);
+  if (passphrase) {
+    pemcrypt.decrypt(block, passphrase);
+  }
 
-  if (block.type == 'RSA PRIVATE KEY') {
+  if (block.type === 'RSA PRIVATE KEY') {
     return createPrivateKeyFromPKCS1(block.data);
   }
   return createPrivateKeyFromPKCS8(block.data);

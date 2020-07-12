@@ -13,24 +13,19 @@ import fg from 'fast-glob';
 import {SHA1} from '@artlab/crypto/sha1';
 import {asn1} from '@artlab/crypto/encoding/asn1';
 import {x509} from '@artlab/crypto/encoding/x509';
-import {Certificate} from './models';
+import {Certificate, readCerts, readCertsFromFile} from './x509';
 import {verify, VerifyCallback, VerifyOptions} from './verifer';
-import {readCerts, readCertsFromFile} from './utils';
 
 function raw(node: asn1.Node) {
-  return node.raw || node.encode();
+  return node.raw ?? node.encode();
 }
 
 function ensureSubjectHash(subject: x509.RDNSequence): string {
-  // @ts-ignore
-  if (!subject._hash) {
-    // @ts-ignore
-    subject._hash = SHA1.digest(subject.raw || subject.encode()).toString(
-      'hex',
-    );
+  const s = subject as any;
+  if (!s._hash) {
+    s._hash = SHA1.digest(subject.raw ?? subject.encode()).toString('hex');
   }
-  // @ts-ignore
-  return subject._hash;
+  return s._hash;
 }
 
 export class CAStore {
@@ -124,7 +119,7 @@ export class CAStore {
     const entries = await fg(patterns);
 
     for (const entry of entries) {
-      await this.add(readCertsFromFile(entry));
+      this.add(readCertsFromFile(entry));
     }
 
     return this;

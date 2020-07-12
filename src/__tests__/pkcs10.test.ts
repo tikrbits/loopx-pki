@@ -1,5 +1,5 @@
 import {assert} from '@artlab/bsert';
-import {CertificationRequest} from '../models';
+import {CertificationRequest} from '../pkcs10';
 import {PkixCertificationRequest} from '../builders';
 import {PkixECDSAPrivateKey} from '../keys';
 import {readFixtureAsString} from './support';

@@ -113,7 +113,9 @@ export abstract class PkixPrivateKey {
     const block = new pem.PEMBlock();
     block.type = 'PRIVATE KEY';
     block.data = this.toPKCS8(compress);
-    passphrase && pemcrypt.encrypt(block, 'AES-256-CBC', passphrase);
+    if (passphrase) {
+      pemcrypt.encrypt(block, 'AES-256-CBC', passphrase);
+    }
     return block.toString();
   }
 

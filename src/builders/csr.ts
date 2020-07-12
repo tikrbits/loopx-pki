@@ -7,7 +7,7 @@ import {
   PkixSignatureAlgorithm,
 } from './commons';
 import {createPublicKeyFromSPKI, PkixPrivateKey, PkixPublicKey} from '../keys';
-import {CertificationRequest} from '../models';
+import {CertificationRequest} from '../pkcs10';
 import {assert} from '../utils';
 
 export interface PkixCertificationRequestParams {
@@ -32,7 +32,7 @@ export class PkixCertificationRequest {
   }
 
   constructor(params?: PkixCertificationRequestParams) {
-    params = params || {};
+    params = params ?? {};
 
     this.version = 2;
     this.subject = new PkixRDNs(params.subject);
@@ -70,8 +70,8 @@ export class PkixCertificationRequest {
     hash: string | HashCtor = 'sha256',
     compressPubkey?: boolean,
   ) {
-    if (!this.pubkey) {
-      this.pubkey = key?.generatePublicKey()!;
+    if (!this.pubkey && key) {
+      this.pubkey = key.generatePublicKey();
     }
     assert(this.pubkey, 'public key is required');
 

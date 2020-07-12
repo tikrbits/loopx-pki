@@ -1,1 +1,6 @@
-module.exports = require('@artlab/build/config/.mocharc.json');
+const defaults = require('@artlab/build/config/.mocharc.json');
+
+module.exports = {
+  ...defaults,
+  reporter: 'spec',
+};

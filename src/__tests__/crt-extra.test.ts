@@ -1,7 +1,7 @@
 import '../setup/all';
 import {assert} from '@artlab/bsert';
 import {PkixCertificate} from '../builders';
-import {Certificate} from '../models';
+import {Certificate} from '../x509';
 import {readFixtureAsString} from './support';
 
 describe('crt/extra', function () {

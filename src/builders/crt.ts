@@ -1,9 +1,9 @@
 import {HashCtor} from '@artlab/crypto';
 import {x509} from '@artlab/crypto/encoding/x509';
 
-import {Certificate, resolveSignatureAlgorithmOID} from '../models';
+import {Certificate, resolveSignatureAlgorithmOID} from '../x509';
 import {createPublicKeyFromSPKI, PkixPrivateKey, PkixPublicKey} from '../keys';
-import * as dt from '../datetime';
+import {dt} from '../utils';
 
 import {PkixCertExtensions, PkixCertExtParams} from '../extensions';
 import {
@@ -52,7 +52,7 @@ export class PkixCertificate {
   }
 
   constructor(params?: PkixCertificateParams) {
-    params = params || {};
+    params = params ?? {};
 
     let serialNumber: Buffer = DefaultSerialNumber;
     if (Buffer.isBuffer(params.serialNumber)) {
@@ -61,10 +61,9 @@ export class PkixCertificate {
       serialNumber = Buffer.from(params.serialNumber, 'hex');
     }
 
-    const notBefore = params.notBefore || new Date();
-    const notAfter = params.notAfter
-      ? params.notAfter
-      : dt.add(notBefore, params.duration || '1y');
+    const notBefore = params.notBefore ?? new Date();
+    const notAfter =
+      params.notAfter ?? dt.add(notBefore, params.duration ?? '1y');
 
     // TBSCertificate
     this.version = 0x02;
@@ -75,7 +74,7 @@ export class PkixCertificate {
 
     this.validity = new PkixValidity({notBefore, notAfter});
     this.subject = new PkixRDNs(params.subject);
-    this.issuer = new PkixRDNs(params.issuer || params.subject);
+    this.issuer = new PkixRDNs(params.issuer ?? params.subject);
     this.extensions = new PkixCertExtensions(params.extensions);
 
     this.pubkey = params.pubkey!;
@@ -101,8 +100,8 @@ export class PkixCertificate {
     this.serialNumber = tbs.serialNumber.value;
 
     this.pubkey = createPublicKeyFromSPKI(tbs.subjectPublicKeyInfo);
-    this.subjectUniqueId = tbs && tbs.subjectUniqueID.value;
-    this.issuerUniqueId = tbs && tbs.issuerUniqueID.value;
+    this.subjectUniqueId = tbs?.subjectUniqueID.value;
+    this.issuerUniqueId = tbs?.issuerUniqueID.value;
 
     this.validity = PkixValidity.fromASN1(tbs.validity);
     this.subject = PkixRDNs.fromASN1(tbs.subject);

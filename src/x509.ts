@@ -1,10 +1,12 @@
 import {x509} from '@artlab/crypto/encoding/x509';
 import {oids} from '@artlab/crypto/encoding/oids';
+import {pem} from '@artlab/crypto/encoding/pem';
+import fs from 'fs-extra';
 import {HashCtor} from '@artlab/crypto';
-import {IssuerMisMatchError} from '../errors';
-import {algs} from '../algs';
-import {createPublicKeyFromSPKI, PkixPrivateKey, PkixPublicKey} from '../keys';
-import {PkixCertExtBasicConstraints, PkixCertExtensions} from '../extensions';
+import {IssuerMisMatchError} from './errors';
+import {algs} from './algs';
+import {createPublicKeyFromSPKI, PkixPrivateKey, PkixPublicKey} from './keys';
+import {PkixCertExtBasicConstraints, PkixCertExtensions} from './extensions';
 
 export class Certificate extends x509.Certificate {
   protected _extensions: PkixCertExtensions;
@@ -91,7 +93,7 @@ export class Certificate extends x509.Certificate {
       );
     }
 
-    const raw = child.tbsCertificate.raw || child.tbsCertificate.encode();
+    const raw = child.tbsCertificate.raw ?? child.tbsCertificate.encode();
 
     return this.pubkey.verifier(hash).verifyMessage(raw, child.signature.value);
   }
@@ -105,4 +107,19 @@ export function resolveSignatureAlgorithmOID(
   return (
     oids.foid(key.asym.algo + hash.id.toUpperCase()) || oids.foid(key.asym.algo)
   );
+}
+
+export function readCerts(data: string): Certificate[] {
+  const answer: Certificate[] = [];
+  for (const block of pem.decode(data)) {
+    if (block.type !== 'CERTIFICATE') {
+      continue;
+    }
+    answer.push(<Certificate>Certificate.decode(block.data));
+  }
+  return answer;
+}
+
+export function readCertsFromFile(file: string): Certificate[] {
+  return readCerts(fs.readFileSync(file).toString('utf8'));
 }

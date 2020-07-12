@@ -76,7 +76,7 @@ describe('keys', function () {
 
       for (const [i, json] of vectors.entries()) {
         const vector = parseVector(json);
-
+        /* eslint-disable */
         const [
           privRaw,
           pubRaw,
@@ -91,6 +91,7 @@ describe('keys', function () {
           pkcs8,
           spki,
         ] = vector;
+        /* eslint-enable */
 
         if (typeof hash === 'function') {
           itCurve([i, 'rsa', privRaw, pubRaw, msg, sig1, hash], []);
@@ -108,6 +109,7 @@ describe('keys', function () {
       for (const curve of ecdsa_curves) {
         describe(curve, () => {
           for (const [i, vector] of getVectors(curve).entries()) {
+            /* eslint-disable */
             const [
               priv,
               pub,
@@ -133,7 +135,7 @@ describe('keys', function () {
               other,
               secret,
             ] = vector;
-
+            /* eslint-enable */
             itCurve([i, curve, priv, pub, msg, sig, null], []);
           }
         });
@@ -149,6 +151,7 @@ describe('keys', function () {
       for (const curve of eddsa_curves) {
         describe(curve, () => {
           for (const [i, vector] of getVectors(curve).entries()) {
+            /* eslint-disable */
             const [
               priv,
               scalar,
@@ -178,7 +181,7 @@ describe('keys', function () {
               edSecret,
               montSecret,
             ] = vector;
-
+            /* eslint-enable */
             itCurve([i, curve, priv, pub, msg, sig, null], [ph]);
           }
         });

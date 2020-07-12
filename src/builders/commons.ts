@@ -34,7 +34,7 @@ export class PkixValidity {
   }
 
   toASN1(validity?: x509.Validity) {
-    validity = validity || new x509.Validity();
+    validity = validity ?? new x509.Validity();
     validity.notBefore.node.set(Math.floor(this.notBefore.getTime() / 1000));
     validity.notAfter.node.set(Math.floor(this.notAfter.getTime() / 1000));
     return validity;
@@ -96,7 +96,7 @@ export class PkixAttr {
 export class PkixRDNs extends Array<PkixAttr> {
   constructor(attrs?: PkixAttrProps[]) {
     super();
-    attrs = attrs || [];
+    attrs = attrs ?? [];
     this.push(...attrs.map(attr => new PkixAttr(attr)));
   }
 
@@ -116,7 +116,7 @@ export class PkixRDNs extends Array<PkixAttr> {
   }
 
   toASN1(rdns?: x509.RDNSequence) {
-    rdns = rdns || new x509.RDNSequence();
+    rdns = rdns ?? new x509.RDNSequence();
     // TODO support comapact mode?
     // for (const attr of this) {
     //   if (!rdns.names[0]) {
@@ -177,8 +177,8 @@ export class PkixRDNs extends Array<PkixAttr> {
 
   set(attrs: {[id: string]: any}) {
     this.clean();
-    for (const entry of Object.entries(attrs)) {
-      this.add(attrs[0], attrs[1]);
+    for (const name of Object.keys(attrs)) {
+      this.add(name, attrs[name]);
     }
   }
 }
@@ -187,7 +187,7 @@ export class PkixSignatureAlgorithm {
   algorithm: string;
 
   constructor(algorithm?: string) {
-    this.algorithm = algorithm || oids.NONE;
+    this.algorithm = algorithm ?? oids.NONE;
   }
 
   static fromASN1(ai: x509.AlgorithmIdentifier) {
@@ -195,7 +195,7 @@ export class PkixSignatureAlgorithm {
   }
 
   toASN1(ai?: x509.AlgorithmIdentifier) {
-    ai = ai || new x509.AlgorithmIdentifier();
+    ai = ai ?? new x509.AlgorithmIdentifier();
     ai.algorithm.set(oids.foid(this.algorithm));
     return ai;
   }

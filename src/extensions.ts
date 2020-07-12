@@ -2,7 +2,7 @@ import {BufferReader, StaticWriter} from '@artlab/bufio';
 import {oids} from '@artlab/crypto/encoding/oids';
 import {asn1} from '@artlab/crypto/encoding/asn1';
 import {x509} from '@artlab/crypto/encoding/x509';
-import {assert} from '../utils';
+import {assert} from './utils';
 
 export interface PkixCertExtOptions {
   critical?: boolean;
@@ -22,6 +22,7 @@ export class PkixCertExt {
 
   constructor(params: PkixCertExtParams) {
     this.check(params);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const {id, critical, value, ...others} = params;
     this.critical = !!critical;
     if (value) {
@@ -226,12 +227,12 @@ export class BasicConstraints extends asn1.Sequence {
 
   readBody(br: BufferReader) {
     if (br.left()) {
-      this._ca = this._ca || new asn1.Bool();
+      this._ca = this._ca ?? new asn1.Bool();
       this._ca.read(br);
     }
 
     if (br.left()) {
-      this._maxPathLen = this._maxPathLen || new asn1.Integer();
+      this._maxPathLen = this._maxPathLen ?? new asn1.Integer();
       this._maxPathLen.read(br);
     }
 
@@ -301,20 +302,22 @@ export function createExtension(
   const Ext =
     PkixCertExtensionClasses.find(
       cls => cls.id === ext.id || cls.id === oids.foid(ext.id),
-    ) || PkixCertExtGeneric;
+    ) ?? PkixCertExtGeneric;
   return new Ext(ext);
 }
 
-function isOctString(x: any): x is asn1.OctString {
-  return x.type === asn1.types.OCTSTRING;
-}
+// function isOctString(x: any): x is asn1.OctString {
+//   return x.type === asn1.types.OCTSTRING;
+// }
 
 export class PkixCertExtensions {
   protected _items: PkixCertExt[];
 
   constructor(exts?: PkixCertExtParams[]) {
     this._items = [];
-    exts && this.add(exts);
+    if (exts) {
+      this.add(exts);
+    }
   }
 
   static fromASN1(extensions: x509.Extensions) {
@@ -330,7 +333,7 @@ export class PkixCertExtensions {
   }
 
   toASN1(extensions?: x509.Extensions, clean?: boolean) {
-    extensions = extensions || new x509.Extensions();
+    extensions = extensions ?? new x509.Extensions();
     if (clean) {
       extensions.clean();
     }
@@ -348,10 +351,9 @@ export class PkixCertExtensions {
     return this._items;
   }
 
-  add(ext: PkixCertExt): void;
-  add(exts: PkixCertExt[]): void;
-  add(ext: PkixCertExtParams): void;
-  add(exts: PkixCertExtParams[]): void;
+  add(
+    exts: PkixCertExt | PkixCertExt[] | PkixCertExtParams | PkixCertExtParams[],
+  ): void;
   add(id: string, options: Buffer | Partial<PkixCertExtOptions>): void;
   add(
     id:

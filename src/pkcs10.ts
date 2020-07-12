@@ -1,8 +1,8 @@
 import {pkcs10} from '@artlab/crypto/encoding/pkcs10';
 import {HashCtor} from '@artlab/crypto/types';
 import {oids} from '@artlab/crypto/encoding/oids';
-import {algs} from '../algs';
-import {createPublicKeyFromSPKI, PkixPrivateKey} from '../keys';
+import {algs} from './algs';
+import {createPublicKeyFromSPKI, PkixPrivateKey} from './keys';
 import {resolveSignatureAlgorithmOID} from './x509';
 
 export class CertificationRequest extends pkcs10.CertificationRequest {
@@ -36,7 +36,7 @@ export class CertificationRequest extends pkcs10.CertificationRequest {
     }
     const info = this.certificationRequestInfo;
 
-    const raw = info.raw || info.encode();
+    const raw = info.raw ?? info.encode();
 
     return this.pubkey.verifier(hash).verifyMessage(raw, this.signature.value);
   }

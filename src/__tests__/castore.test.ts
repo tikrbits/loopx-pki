@@ -1,7 +1,7 @@
 import {assert} from '@artlab/bsert';
 import {CAStore} from '../castore';
 import {resolveFixturePath} from './support';
-import {readCertsFromFile} from '../utils';
+import {readCertsFromFile} from '../x509';
 
 const cert_chain_dst = resolveFixturePath('cas-leafs/dst-gitr-net-chain.pem');
 const cert_leaf_globalsign = resolveFixturePath(

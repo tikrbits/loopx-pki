@@ -1,5 +1,5 @@
 import {CAStore} from './castore';
-import {Certificate} from './models';
+import {Certificate} from './x509';
 import {PkixValidity} from './builders';
 import {
   BadCertificate,
@@ -43,7 +43,7 @@ function verifyWithParent(
   cert: Certificate,
   parent: Certificate,
 ): [Certificate, boolean, undefined | Error] {
-  let selfsigned: boolean = false;
+  let selfsigned = false;
   let error: Error | undefined;
   parent = parent || cas.getIssuer(cert);
   if (!parent) {
@@ -117,7 +117,7 @@ export function verify(
     options = {verify: options};
   }
 
-  options = options || {};
+  options = options ?? {};
 
   // copy cert chain references to another array to protect against changes
   // in verify callback
@@ -127,7 +127,8 @@ export function verify(
   // if no validityCheckDate is specified, default to the current date. Make
   // sure to maintain the value null because it indicates that the validity
   // period should not be checked.
-  const validityCheckDate = options.validityCheckDate || new Date();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const validityCheckDate = options.validityCheckDate ?? new Date();
 
   // verify each cert in the chain using its parent, where the parent
   // is either the next in the chain or from the CA store
@@ -136,9 +137,9 @@ export function verify(
   let error: Error | undefined;
 
   while (chain.length > 0) {
-    let cert = <Certificate>chain.shift();
+    const cert = <Certificate>chain.shift();
     let parent: Certificate | undefined;
-    let selfsigned: boolean = false;
+    let selfsigned = false;
 
     // 1. check valid time
     error = verifyValidity(cert, options);

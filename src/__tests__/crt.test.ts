@@ -7,7 +7,7 @@ import {
   pem_sha512,
 } from './fixtures/certs.pem';
 import {createPrivateKeyFromPEM, createPublicKeyFromPEM} from '../keys';
-import {Certificate} from '../models';
+import {Certificate} from '../x509';
 import {PkixCertificate} from '../builders';
 import {CAStore} from '../castore';
 
