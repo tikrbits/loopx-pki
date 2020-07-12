@@ -1,3 +1,3 @@
 # pki
 
-> A PKI library for creating, signing and verify a X509 certificate
+> @artlab/pki is a JavaScript library implementing the formats that are used in PKI applications.

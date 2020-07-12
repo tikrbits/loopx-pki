@@ -1,7 +1,7 @@
 {
   "name": "@artlab/pki",
   "version": "0.1.0",
-  "description": "A PKI library for creating, signing and verify a X509 certificate",
+  "description": "@artlab/pki is a JavaScript library implementing the formats that are used in PKI applications.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "engines": {
