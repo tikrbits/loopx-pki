@@ -1,6 +1,6 @@
-import {pkcs10} from '@artlab/crypto/encoding/pkcs10';
-import {HashCtor} from '@artlab/crypto/types';
-import {oids} from '@artlab/crypto/encoding/oids';
+import {pkcs10} from '@tib/crypto/encoding/pkcs10';
+import {HashCtor} from '@tib/crypto/types';
+import {oids} from '@tib/crypto/encoding/oids';
 import {algs} from './algs';
 import {createPublicKeyFromSPKI, AbstractPrivateKey} from './keys';
 import {resolveSignatureAlgorithmOID} from './x509';

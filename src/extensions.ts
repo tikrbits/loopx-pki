@@ -1,7 +1,7 @@
-import {BufferReader, StaticWriter} from '@artlab/bufio';
-import {oids} from '@artlab/crypto/encoding/oids';
-import {asn1} from '@artlab/crypto/encoding/asn1';
-import {x509} from '@artlab/crypto/encoding/x509';
+import {BufferReader, StaticWriter} from '@tib/bufio';
+import {oids} from '@tib/crypto/encoding/oids';
+import {asn1} from '@tib/crypto/encoding/asn1';
+import {x509} from '@tib/crypto/encoding/x509';
 import {assert} from './utils';
 
 export interface ExtensionOptions {

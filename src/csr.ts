@@ -1,5 +1,5 @@
-import {HashCtor} from '@artlab/crypto/types';
-import {pkcs10} from '@artlab/crypto/encoding/pkcs10';
+import {HashCtor} from '@tib/crypto/types';
+import {pkcs10} from '@tib/crypto/encoding/pkcs10';
 import {EMPTY, AttrProps, RDNs, SignatureAlgorithm} from './commons';
 import {
   createPublicKeyFromSPKI,

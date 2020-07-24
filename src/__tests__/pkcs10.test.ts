@@ -1,4 +1,4 @@
-import {assert} from '@artlab/bsert';
+import {assert} from '@tib/bsert';
 import {CertificationRequest} from '../pkcs10';
 import {ConfigurableCertificationRequest} from '../csr';
 import {ECDSAPrivateKey} from '../keys';

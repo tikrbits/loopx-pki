@@ -1,6 +1,6 @@
-import {p256} from '@artlab/crypto/p256';
-import {SHA256} from '@artlab/crypto/sha256';
-import {oids} from '@artlab/crypto/encoding/oids';
+import {p256} from '@tib/crypto/p256';
+import {SHA256} from '@tib/crypto/sha256';
+import {oids} from '@tib/crypto/encoding/oids';
 import {algs} from '../algs';
 
 const {curves} = oids;

@@ -1,4 +1,4 @@
-import {assert} from '@artlab/bsert';
+import {assert} from '@tib/bsert';
 import {CAStore} from '../castore';
 import {resolveFixturePath} from './support';
 import {readCertsFromFile} from '../x509';

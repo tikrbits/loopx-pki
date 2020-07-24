@@ -1,8 +1,8 @@
-import {Asym, EDDSA} from '@artlab/crypto/types';
-import {pkcs8} from '@artlab/crypto/encoding/pkcs8';
-import {oids} from '@artlab/crypto/encoding/oids';
-import {asn1} from '@artlab/crypto/encoding/asn1';
-import {x509} from '@artlab/crypto/encoding/x509';
+import {Asym, EDDSA} from '@tib/crypto/types';
+import {pkcs8} from '@tib/crypto/encoding/pkcs8';
+import {oids} from '@tib/crypto/encoding/oids';
+import {asn1} from '@tib/crypto/encoding/asn1';
+import {x509} from '@tib/crypto/encoding/x509';
 import {algs} from '../algs';
 import {AbstractPrivateKey, AbstractPublicKey} from './key';
 import {assert} from '../utils';

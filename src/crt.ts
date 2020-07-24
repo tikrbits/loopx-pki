@@ -1,5 +1,5 @@
-import {HashCtor} from '@artlab/crypto';
-import {x509} from '@artlab/crypto/encoding/x509';
+import {HashCtor} from '@tib/crypto';
+import {x509} from '@tib/crypto/encoding/x509';
 import {Certificate, resolveSignatureAlgorithmOID} from './x509';
 import {
   createPublicKeyFromSPKI,

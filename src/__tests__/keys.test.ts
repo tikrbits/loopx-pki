@@ -1,5 +1,5 @@
 import '../setup/all';
-import {assert} from '@artlab/bsert';
+import {assert} from '@tib/bsert';
 import {
   createPrivateKey,
   createPrivateKeyFromPEM,

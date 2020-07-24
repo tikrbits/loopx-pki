@@ -1,9 +1,9 @@
-import {asn1} from '@artlab/crypto/encoding/asn1';
-import {x509} from '@artlab/crypto/encoding/x509';
-import {pkcs8} from '@artlab/crypto/encoding/pkcs8';
-import {pem} from '@artlab/crypto/encoding/pem';
-import {pemcrypt} from '@artlab/crypto/encoding/pemcrypt';
-import {Asym, ECDSA} from '@artlab/crypto/types';
+import {asn1} from '@tib/crypto/encoding/asn1';
+import {x509} from '@tib/crypto/encoding/x509';
+import {pkcs8} from '@tib/crypto/encoding/pkcs8';
+import {pem} from '@tib/crypto/encoding/pem';
+import {pemcrypt} from '@tib/crypto/encoding/pemcrypt';
+import {Asym, ECDSA} from '@tib/crypto/types';
 import {algs, getAsymType} from '../algs';
 import {AbstractPrivateKey} from './key';
 import {RSAPrivateKey, RSAPublicKey} from './rsa';

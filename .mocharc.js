@@ -1,4 +1,4 @@
-const defaults = require('@artlab/build/config/.mocharc.json');
+const defaults = require('@tib/build/config/.mocharc.json');
 
 module.exports = {
   ...defaults,

@@ -1,4 +1,4 @@
-import {x509} from '@artlab/crypto/encoding/x509';
+import {x509} from '@tib/crypto/encoding/x509';
 
 export class IssuerMisMatchError extends Error {
   expected: x509.Attribute[];

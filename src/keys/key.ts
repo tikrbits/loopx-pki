@@ -1,7 +1,7 @@
-import {Asym} from '@artlab/crypto/types';
-import {HashCtor} from '@artlab/crypto/types';
-import {pem} from '@artlab/crypto/encoding/pem';
-import {pemcrypt} from '@artlab/crypto/encoding/pemcrypt';
+import {Asym} from '@tib/crypto/types';
+import {HashCtor} from '@tib/crypto/types';
+import {pem} from '@tib/crypto/encoding/pem';
+import {pemcrypt} from '@tib/crypto/encoding/pemcrypt';
 import {algs} from '../algs';
 import {assert} from '../utils';
 

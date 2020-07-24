@@ -1,5 +1,5 @@
 import '../setup/all';
-import {assert} from '@artlab/bsert';
+import {assert} from '@tib/bsert';
 import {
   pem_past_2050,
   pem_sha1,

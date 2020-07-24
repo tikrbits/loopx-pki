@@ -1,8 +1,8 @@
-import {x509} from '@artlab/crypto/encoding/x509';
-import {oids} from '@artlab/crypto/encoding/oids';
-import {pem} from '@artlab/crypto/encoding/pem';
+import {x509} from '@tib/crypto/encoding/x509';
+import {oids} from '@tib/crypto/encoding/oids';
+import {pem} from '@tib/crypto/encoding/pem';
 import fs from 'fs-extra';
-import {HashCtor} from '@artlab/crypto';
+import {HashCtor} from '@tib/crypto';
 import {IssuerMisMatchError} from './errors';
 import {algs} from './algs';
 import {
