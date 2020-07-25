@@ -1,6 +1,6 @@
 {
   "name": "@tib/pki",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "A JavaScript library implementing the formats that are used in PKI applications.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
