@@ -38,7 +38,8 @@
   "dependencies": {
     "@tib/bufio": "^1.1.0",
     "@tib/crypto": "^0.2.1",
-    "fast-glob": "^3.2.4"
+    "fast-glob": "^3.2.4",
+    "tslib": "^2.0.0"
   },
   "devDependencies": {
     "@tib/bsert": "^0.2.0",
