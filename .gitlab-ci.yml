@@ -14,10 +14,6 @@ before_script:
 
 test:
   script:
-    - npm run test
-
-coverage:
-  script:
     - npm run coverage
   coverage: /Statements\s+:\s(\d+.?\d+)%/
   artifacts:
