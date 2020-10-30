@@ -1,6 +1,6 @@
-import {oids} from '@tib/crypto/encoding/oids';
-import {asn1} from '@tib/crypto/encoding/asn1';
-import {x509} from '@tib/crypto/encoding/x509';
+import {oids} from '@loopx/crypto/encoding/oids';
+import {asn1} from '@loopx/crypto/encoding/asn1';
+import {x509} from '@loopx/crypto/encoding/x509';
 
 export const EMPTY = Buffer.allocUnsafe(0);
 

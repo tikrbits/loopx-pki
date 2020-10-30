@@ -1,4 +1,4 @@
-import {assert} from '@tib/bsert';
+import {assert} from '@loopx/bsert';
 import {CertificationRequest} from '../pkcs10';
 import {ConfigurableCertificationRequest} from '../csr';
 import {ECDSAPrivateKey} from '../keys';

@@ -1,5 +1,5 @@
-import {HashCtor} from '@tib/crypto/types';
-import {pkcs10} from '@tib/crypto/encoding/pkcs10';
+import {HashCtor} from '@loopx/crypto/types';
+import {pkcs10} from '@loopx/crypto/encoding/pkcs10';
 import {EMPTY, AttrProps, RDNs, SignatureAlgorithm} from './commons';
 import {
   createPublicKeyFromSPKI,

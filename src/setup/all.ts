@@ -1,21 +1,21 @@
-import {p192} from '@tib/crypto/p192';
-import {p224} from '@tib/crypto/p224';
-import {p256} from '@tib/crypto/p256';
-import {p384} from '@tib/crypto/p384';
-import {p521} from '@tib/crypto/p521';
-import {secp256k1} from '@tib/crypto/secp256k1';
-import {ed448} from '@tib/crypto/ed448';
-import {ed25519} from '@tib/crypto/ed25519';
-import {rsa} from '@tib/crypto/rsa';
+import {p192} from '@loopx/crypto/p192';
+import {p224} from '@loopx/crypto/p224';
+import {p256} from '@loopx/crypto/p256';
+import {p384} from '@loopx/crypto/p384';
+import {p521} from '@loopx/crypto/p521';
+import {secp256k1} from '@loopx/crypto/secp256k1';
+import {ed448} from '@loopx/crypto/ed448';
+import {ed25519} from '@loopx/crypto/ed25519';
+import {rsa} from '@loopx/crypto/rsa';
 
-import {MD5} from '@tib/crypto/md5';
-import {SHA1} from '@tib/crypto/sha1';
-import {SHA224} from '@tib/crypto/sha224';
-import {SHA256} from '@tib/crypto/sha256';
-import {SHA384} from '@tib/crypto/sha384';
-import {SHA512} from '@tib/crypto/sha512';
+import {MD5} from '@loopx/crypto/md5';
+import {SHA1} from '@loopx/crypto/sha1';
+import {SHA224} from '@loopx/crypto/sha224';
+import {SHA256} from '@loopx/crypto/sha256';
+import {SHA384} from '@loopx/crypto/sha384';
+import {SHA512} from '@loopx/crypto/sha512';
 
-import {oids} from '@tib/crypto/encoding/oids';
+import {oids} from '@loopx/crypto/encoding/oids';
 import {algs} from '../algs';
 
 const {curves, keyAlgs} = oids;

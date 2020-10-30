@@ -1,6 +1,6 @@
-import {pkcs10} from '@tib/crypto/encoding/pkcs10';
-import {HashCtor} from '@tib/crypto/types';
-import {oids} from '@tib/crypto/encoding/oids';
+import {pkcs10} from '@loopx/crypto/encoding/pkcs10';
+import {HashCtor} from '@loopx/crypto/types';
+import {oids} from '@loopx/crypto/encoding/oids';
 import {algs} from './algs';
 import {createPublicKeyFromSPKI, AbstractPrivateKey} from './keys';
 import {resolveSignatureAlgorithmOID} from './x509';

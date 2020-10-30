@@ -1,9 +1,9 @@
-import {asn1} from '@tib/crypto/encoding/asn1';
-import {x509} from '@tib/crypto/encoding/x509';
-import {pkcs8} from '@tib/crypto/encoding/pkcs8';
-import {pem} from '@tib/crypto/encoding/pem';
-import {pemcrypt} from '@tib/crypto/encoding/pemcrypt';
-import {Asym, ECDSA} from '@tib/crypto/types';
+import {asn1} from '@loopx/crypto/encoding/asn1';
+import {x509} from '@loopx/crypto/encoding/x509';
+import {pkcs8} from '@loopx/crypto/encoding/pkcs8';
+import {pem} from '@loopx/crypto/encoding/pem';
+import {pemcrypt} from '@loopx/crypto/encoding/pemcrypt';
+import {Asym, ECDSA} from '@loopx/crypto/types';
 import {algs, getAsymType} from '../algs';
 import {AbstractPrivateKey} from './key';
 import {RSAPrivateKey, RSAPublicKey} from './rsa';

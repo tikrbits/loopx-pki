@@ -1,8 +1,8 @@
-import {x509} from '@tib/crypto/encoding/x509';
-import {oids} from '@tib/crypto/encoding/oids';
-import {pem} from '@tib/crypto/encoding/pem';
+import {x509} from '@loopx/crypto/encoding/x509';
+import {oids} from '@loopx/crypto/encoding/oids';
+import {pem} from '@loopx/crypto/encoding/pem';
 import fs from 'fs-extra';
-import {HashCtor} from '@tib/crypto';
+import {HashCtor} from '@loopx/crypto';
 import {IssuerMisMatchError} from './errors';
 import {algs} from './algs';
 import {

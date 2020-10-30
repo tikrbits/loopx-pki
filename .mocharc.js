@@ -1,4 +1,4 @@
-const defaults = require('@tib/build/config/.mocharc.json');
+const defaults = require('@loopback/build/config/.mocharc.json');
 
 module.exports = {
   ...defaults,

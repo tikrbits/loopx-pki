@@ -1,4 +1,4 @@
-import {assert} from '@tib/bsert';
+import {assert} from '@loopx/bsert';
 import {CAStore} from '../castore';
 import {resolveFixturePath} from './support';
 import {readCertsFromFile} from '../x509';

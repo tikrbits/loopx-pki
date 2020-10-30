@@ -1,5 +1,5 @@
-import {HashCtor, Asym} from '@tib/crypto/types';
-import {oids} from '@tib/crypto/encoding/oids';
+import {HashCtor, Asym} from '@loopx/crypto/types';
+import {oids} from '@loopx/crypto/encoding/oids';
 import {assert} from './utils';
 
 const {foid, fname, findHashBySig} = oids;

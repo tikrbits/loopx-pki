@@ -1,7 +1,7 @@
-import {Asym} from '@tib/crypto/types';
-import {HashCtor} from '@tib/crypto/types';
-import {pem} from '@tib/crypto/encoding/pem';
-import {pemcrypt} from '@tib/crypto/encoding/pemcrypt';
+import {Asym} from '@loopx/crypto/types';
+import {HashCtor} from '@loopx/crypto/types';
+import {pem} from '@loopx/crypto/encoding/pem';
+import {pemcrypt} from '@loopx/crypto/encoding/pemcrypt';
 import {algs} from '../algs';
 import {assert} from '../utils';
 

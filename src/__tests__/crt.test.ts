@@ -1,5 +1,5 @@
 import '../setup/all';
-import {assert} from '@tib/bsert';
+import {assert} from '@loopx/bsert';
 import {
   pem_past_2050,
   pem_sha1,

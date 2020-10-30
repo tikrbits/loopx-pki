@@ -10,9 +10,9 @@
  */
 
 import fg from 'fast-glob';
-import {SHA1} from '@tib/crypto/sha1';
-import {asn1} from '@tib/crypto/encoding/asn1';
-import {x509} from '@tib/crypto/encoding/x509';
+import {SHA1} from '@loopx/crypto/sha1';
+import {asn1} from '@loopx/crypto/encoding/asn1';
+import {x509} from '@loopx/crypto/encoding/x509';
 import {Certificate, readCerts, readCertsFromFile} from './x509';
 import {verify, VerifyCallback, VerifyOptions} from './verifer';
 

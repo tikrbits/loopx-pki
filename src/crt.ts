@@ -1,5 +1,5 @@
-import {HashCtor} from '@tib/crypto';
-import {x509} from '@tib/crypto/encoding/x509';
+import {HashCtor} from '@loopx/crypto';
+import {x509} from '@loopx/crypto/encoding/x509';
 import {Certificate, resolveSignatureAlgorithmOID} from './x509';
 import {
   createPublicKeyFromSPKI,

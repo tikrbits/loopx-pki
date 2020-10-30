@@ -1,7 +1,7 @@
-import {BufferReader, StaticWriter} from '@tib/bufio';
-import {oids} from '@tib/crypto/encoding/oids';
-import {asn1} from '@tib/crypto/encoding/asn1';
-import {x509} from '@tib/crypto/encoding/x509';
+import {BufferReader, StaticWriter} from '@loopx/bufio';
+import {oids} from '@loopx/crypto/encoding/oids';
+import {asn1} from '@loopx/crypto/encoding/asn1';
+import {x509} from '@loopx/crypto/encoding/x509';
 import {assert} from './utils';
 
 export interface ExtensionOptions {
@@ -99,7 +99,8 @@ export interface KeyUsageExtensionOptions extends ExtensionOptions {
   decipherOnly?: boolean;
 }
 
-export class KeyUsageExtension extends Extension
+export class KeyUsageExtension
+  extends Extension
   implements KeyUsageExtensionOptions {
   static id: string = oids.exts.KEY_USAGE;
 
@@ -249,7 +250,8 @@ export interface BasicConstraintsExtensionOptions extends ExtensionOptions {
   maxPathLen?: number;
 }
 
-export class BasicConstraintsExtension extends Extension
+export class BasicConstraintsExtension
+  extends Extension
   implements BasicConstraintsExtensionOptions {
   static id: string = oids.exts.BASIC_CONSTRAINTS;
 

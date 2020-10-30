@@ -1,8 +1,8 @@
-import {Asym, EDDSA} from '@tib/crypto/types';
-import {pkcs8} from '@tib/crypto/encoding/pkcs8';
-import {oids} from '@tib/crypto/encoding/oids';
-import {asn1} from '@tib/crypto/encoding/asn1';
-import {x509} from '@tib/crypto/encoding/x509';
+import {Asym, EDDSA} from '@loopx/crypto/types';
+import {pkcs8} from '@loopx/crypto/encoding/pkcs8';
+import {oids} from '@loopx/crypto/encoding/oids';
+import {asn1} from '@loopx/crypto/encoding/asn1';
+import {x509} from '@loopx/crypto/encoding/x509';
 import {algs} from '../algs';
 import {AbstractPrivateKey, AbstractPublicKey} from './key';
 import {assert} from '../utils';

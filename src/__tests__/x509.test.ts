@@ -1,6 +1,6 @@
 import '../setup/all';
-import {assert} from '@tib/bsert';
-import {oids} from '@tib/crypto/encoding/oids';
+import {assert} from '@loopx/bsert';
+import {oids} from '@loopx/crypto/encoding/oids';
 import {createPrivateKey} from '../keys';
 import {ConfigurableCertificate} from '../crt';
 
