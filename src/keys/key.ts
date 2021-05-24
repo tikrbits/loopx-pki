@@ -129,11 +129,7 @@ export abstract class AbstractPrivateKey {
 }
 
 export class Signer {
-  constructor(
-    protected asym: Asym<any, any>,
-    protected key: Buffer,
-    protected hash?: HashCtor,
-  ) {}
+  constructor(protected asym: Asym<any, any>, protected key: Buffer, protected hash?: HashCtor) {}
 
   sign(msg: Buffer, ...extra: any[]) {
     return this.signMessage(msg, ...extra);
@@ -149,25 +145,17 @@ export class Signer {
 }
 
 export class Verifier {
-  constructor(
-    protected asym: Asym<any, any>,
-    protected key: Buffer,
-    protected hash?: HashCtor,
-  ) {}
+  constructor(protected asym: Asym<any, any>, protected key: Buffer, protected hash?: HashCtor) {}
 
   verify(msg: Buffer, sig: Buffer, ...extra: any[]) {
     return this.verifyMessage(msg, sig, ...extra);
   }
 
   verifyMessage(msg: Buffer, sig: Buffer, ...extra: any[]) {
-    return this.asym
-      .adsa(this.hash)
-      .verifyMessage(msg, sig, this.key, ...extra);
+    return this.asym.adsa(this.hash).verifyMessage(msg, sig, this.key, ...extra);
   }
 
   verifyDigest(digest: Buffer, sig: Buffer, ...extra: any[]) {
-    return this.asym
-      .adsa(this.hash)
-      .verifyDigest(digest, sig, this.key, ...extra);
+    return this.asym.adsa(this.hash).verifyDigest(digest, sig, this.key, ...extra);
   }
 }

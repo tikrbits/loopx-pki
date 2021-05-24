@@ -1,11 +1,7 @@
 import {HashCtor} from '@loopx/crypto';
 import {x509} from '@loopx/crypto/encoding/x509';
 import {Certificate, resolveSignatureAlgorithmOID} from './x509';
-import {
-  createPublicKeyFromSPKI,
-  AbstractPrivateKey,
-  AbstractPublicKey,
-} from './keys';
+import {createPublicKeyFromSPKI, AbstractPrivateKey, AbstractPublicKey} from './keys';
 import {Extensions, ExtensionParams} from './extensions';
 import {dt} from './utils';
 import {EMPTY, AttrProps, RDNs, SignatureAlgorithm, Validity} from './commons';
@@ -58,8 +54,7 @@ export class ConfigurableCertificate {
     }
 
     const notBefore = params.notBefore ?? new Date();
-    const notAfter =
-      params.notAfter ?? dt.add(notBefore, params.duration ?? '1y');
+    const notAfter = params.notAfter ?? dt.add(notBefore, params.duration ?? '1y');
 
     // TBSCertificate
     this.version = 0x02;
@@ -105,20 +100,14 @@ export class ConfigurableCertificate {
     this.extensions = Extensions.fromASN1(tbs.extensions);
 
     // SignatureAlgorithm
-    this.signatureAlgorithm = SignatureAlgorithm.fromASN1(
-      cert.signatureAlgorithm,
-    );
+    this.signatureAlgorithm = SignatureAlgorithm.fromASN1(cert.signatureAlgorithm);
 
     // Signature
     this.signature = cert.signature.value;
     return this;
   }
 
-  build(
-    key?: AbstractPrivateKey,
-    hash: string | HashCtor = 'sha256',
-    compressPubKey?: boolean,
-  ): Certificate {
+  build(key?: AbstractPrivateKey, hash: string | HashCtor = 'sha256', compressPubKey?: boolean): Certificate {
     const cert = new Certificate();
     const tbc = cert.tbsCertificate;
 
@@ -137,9 +126,7 @@ export class ConfigurableCertificate {
 
     if (this.pubkey) {
       tbc.subjectPublicKeyInfo.decode(this.pubkey.toSPKI(compressPubKey));
-      tbc.signature.algorithm.set(
-        resolveSignatureAlgorithmOID(this.pubkey, hash),
-      );
+      tbc.signature.algorithm.set(resolveSignatureAlgorithmOID(this.pubkey, hash));
     }
 
     return key ? cert.sign(key, hash) : cert;

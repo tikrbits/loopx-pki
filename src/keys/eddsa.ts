@@ -21,11 +21,7 @@ export class EDDSAPublicKey extends AbstractPublicKey {
 
   toSPKI(compress?: boolean): Buffer {
     // [RFC8410] Page 4, Section 4.
-    return new x509.SubjectPublicKeyInfo(
-      oids.curves[this.id],
-      new asn1.Null(),
-      this.key,
-    ).encode();
+    return new x509.SubjectPublicKeyInfo(oids.curves[this.id], new asn1.Null(), this.key).encode();
   }
 }
 
@@ -53,8 +49,7 @@ export class EDDSAPrivateKey extends AbstractPrivateKey {
     // [RFC8410] Page 7, Section 7.
     const str = asn1.OctString.decode(raw);
 
-    if (!this.asym.privateKeyVerify(str.value))
-      throw new Error('Invalid private key.');
+    if (!this.asym.privateKeyVerify(str.value)) throw new Error('Invalid private key.');
 
     this.key = this.asym.privateKeyImport({d: str.value});
 
@@ -68,11 +63,6 @@ export class EDDSAPrivateKey extends AbstractPrivateKey {
 
   toPKCS8() {
     // [RFC8410] Page 7, Section 7.
-    return new pkcs8.PrivateKeyInfo(
-      0,
-      oids.curves[this.id],
-      new asn1.Null(),
-      this.export(),
-    ).encode();
+    return new pkcs8.PrivateKeyInfo(0, oids.curves[this.id], new asn1.Null(), this.export()).encode();
   }
 }

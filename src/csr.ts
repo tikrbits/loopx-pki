@@ -1,11 +1,7 @@
 import {HashCtor} from '@loopx/crypto/types';
 import {pkcs10} from '@loopx/crypto/encoding/pkcs10';
 import {EMPTY, AttrProps, RDNs, SignatureAlgorithm} from './commons';
-import {
-  createPublicKeyFromSPKI,
-  AbstractPrivateKey,
-  AbstractPublicKey,
-} from './keys';
+import {createPublicKeyFromSPKI, AbstractPrivateKey, AbstractPublicKey} from './keys';
 import {CertificationRequest} from './pkcs10';
 import {assert} from './utils';
 
@@ -45,9 +41,7 @@ export class ConfigurableCertificationRequest {
     if (Buffer.isBuffer(data)) {
       data = data.toString('utf8');
     }
-    return this.fromPKCS10(
-      <pkcs10.CertificationRequest>pkcs10.CertificationRequest.fromPEM(data),
-    );
+    return this.fromPKCS10(<pkcs10.CertificationRequest>pkcs10.CertificationRequest.fromPEM(data));
   }
 
   fromPKCS10(req: pkcs10.CertificationRequest) {
@@ -57,18 +51,12 @@ export class ConfigurableCertificationRequest {
     this.subject = RDNs.fromASN1(info.subject);
     this.pubkey = createPublicKeyFromSPKI(info.subjectPublicKeyInfo);
 
-    this.signatureAlgorithm = SignatureAlgorithm.fromASN1(
-      req.signatureAlgorithm,
-    );
+    this.signatureAlgorithm = SignatureAlgorithm.fromASN1(req.signatureAlgorithm);
     this.signature = req.signature.value;
     return this;
   }
 
-  build(
-    key?: AbstractPrivateKey,
-    hash: string | HashCtor = 'sha256',
-    compressPubkey?: boolean,
-  ) {
+  build(key?: AbstractPrivateKey, hash: string | HashCtor = 'sha256', compressPubkey?: boolean) {
     if (!this.pubkey && key) {
       this.pubkey = key.generatePublicKey();
     }

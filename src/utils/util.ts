@@ -1,7 +1,4 @@
-export function assert(
-  condition: any,
-  msg = 'no additional info provided',
-): asserts condition {
+export function assert(condition: any, msg = 'no additional info provided'): asserts condition {
   if (!condition) {
     throw new Error('Assertion Error: ' + msg);
   }

@@ -11,9 +11,7 @@ export function resolveFixturePath(...pathSegments: string[]) {
 }
 
 export function readFixtureAsString(...pathSegments: string[]) {
-  return fs
-    .readFileSync(path.resolve(__dirname, 'fixtures', ...pathSegments))
-    .toString();
+  return fs.readFileSync(path.resolve(__dirname, 'fixtures', ...pathSegments)).toString();
 }
 
 export function readFixtureAsJSON(...pathSegments: string[]) {

@@ -28,11 +28,7 @@ export class CertificationRequest extends pkcs10.CertificationRequest {
     const sigOid = this.signatureAlgorithm.algorithm.toString();
     const hash = algs.findHashBySig(sigOid);
     if (!hash) {
-      throw new Error(
-        `Could not compute certificate digest. Unknown signature OID name: ${oids.fname(
-          sigOid,
-        )}`,
-      );
+      throw new Error(`Could not compute certificate digest. Unknown signature OID name: ${oids.fname(sigOid)}`);
     }
     const info = this.certificationRequestInfo;
 

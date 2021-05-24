@@ -1,11 +1,6 @@
 import '../setup/all';
 import {assert} from '@loopx/bsert';
-import {
-  pem_past_2050,
-  pem_sha1,
-  pem_sha256,
-  pem_sha512,
-} from './fixtures/certs.pem';
+import {pem_past_2050, pem_sha1, pem_sha256, pem_sha512} from './fixtures/certs.pem';
 import {createPrivateKeyFromPEM, createPublicKeyFromPEM} from '../keys';
 import {Certificate} from '../x509';
 import {ConfigurableCertificate} from '../crt';
@@ -108,10 +103,7 @@ describe('crt', function () {
     // change the issue subject will cause to throw exception when verify
     pc.subject.findByFilter('CommonName')!.value = 'hello';
     const issuer = pc.build(keys.privkey, 'sha256');
-    assert.throws(
-      () => issuer.verify(cert),
-      'not issue the given child certificate',
-    );
+    assert.throws(() => issuer.verify(cert), 'not issue the given child certificate');
 
     // verify certificate chain
     const cas = new CAStore();

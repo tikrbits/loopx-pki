@@ -5,11 +5,7 @@ import fs from 'fs-extra';
 import {HashCtor} from '@loopx/crypto';
 import {IssuerMisMatchError} from './errors';
 import {algs} from './algs';
-import {
-  createPublicKeyFromSPKI,
-  AbstractPrivateKey,
-  AbstractPublicKey,
-} from './keys';
+import {createPublicKeyFromSPKI, AbstractPrivateKey, AbstractPublicKey} from './keys';
 import {BasicConstraintsExtension, Extensions} from './extensions';
 
 export class Certificate extends x509.Certificate {
@@ -19,18 +15,14 @@ export class Certificate extends x509.Certificate {
     if (this._extensions) {
       return this._extensions;
     }
-    return (this._extensions = Extensions.fromASN1(
-      this.tbsCertificate.extensions,
-    ));
+    return (this._extensions = Extensions.fromASN1(this.tbsCertificate.extensions));
   }
 
   get basicConstraints() {
     if (!this.extensions || !this.extensions.items) {
       return;
     }
-    return <BasicConstraintsExtension>(
-      this.extensions.items.find(i => i.id === oids.exts.BASIC_CONSTRAINTS)
-    );
+    return <BasicConstraintsExtension>this.extensions.items.find(i => i.id === oids.exts.BASIC_CONSTRAINTS);
   }
 
   get isCA(): boolean {
@@ -78,23 +70,15 @@ export class Certificate extends x509.Certificate {
   verify(child: Certificate) {
     if (!this.issued(child)) {
       throw new IssuerMisMatchError(
-        child.tbsCertificate.issuer.names[0]
-          ? child.tbsCertificate.issuer.names[0].attributes
-          : [],
-        this.tbsCertificate.issuer.names[0]
-          ? this.tbsCertificate.issuer.names[0].attributes
-          : [],
+        child.tbsCertificate.issuer.names[0] ? child.tbsCertificate.issuer.names[0].attributes : [],
+        this.tbsCertificate.issuer.names[0] ? this.tbsCertificate.issuer.names[0].attributes : [],
       );
     }
 
     const sigoid = child.signatureAlgorithm.algorithm.toString();
     const hash = algs.findHashBySig(sigoid);
     if (!hash) {
-      throw new Error(
-        `Could not compute certificate digest. Unknown signature OID name: ${oids.fname(
-          sigoid,
-        )}`,
-      );
+      throw new Error(`Could not compute certificate digest. Unknown signature OID name: ${oids.fname(sigoid)}`);
     }
 
     const raw = child.tbsCertificate.raw ?? child.tbsCertificate.encode();
@@ -103,14 +87,9 @@ export class Certificate extends x509.Certificate {
   }
 }
 
-export function resolveSignatureAlgorithmOID(
-  key: AbstractPublicKey | AbstractPrivateKey,
-  hash: string | HashCtor,
-) {
+export function resolveSignatureAlgorithmOID(key: AbstractPublicKey | AbstractPrivateKey, hash: string | HashCtor) {
   hash = typeof hash === 'string' ? algs.getHash(hash) : hash;
-  return (
-    oids.foid(key.asym.algo + hash.id.toUpperCase()) || oids.foid(key.asym.algo)
-  );
+  return oids.foid(key.asym.algo + hash.id.toUpperCase()) || oids.foid(key.asym.algo);
 }
 
 export function readCerts(data: string): Certificate[] {

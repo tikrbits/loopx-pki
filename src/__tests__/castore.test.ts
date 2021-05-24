@@ -4,12 +4,8 @@ import {resolveFixturePath} from './support';
 import {readCertsFromFile} from '../x509';
 
 const cert_chain_dst = resolveFixturePath('cas-leafs/dst-gitr-net-chain.pem');
-const cert_leaf_globalsign = resolveFixturePath(
-  'cas-leafs/globalsign-gts-google-com.pem',
-);
-const cert_leaf_frank4dd_expired = resolveFixturePath(
-  'cas-leafs/frank4dd-rsa-example-cert.pem',
-);
+const cert_leaf_globalsign = resolveFixturePath('cas-leafs/globalsign-gts-google-com.pem');
+const cert_leaf_frank4dd_expired = resolveFixturePath('cas-leafs/frank4dd-rsa-example-cert.pem');
 const cert_leaf_github = resolveFixturePath('certs/github.crt');
 
 describe('castore', function () {
@@ -52,9 +48,6 @@ describe('castore', function () {
   it('should verify failure without trust root', async function () {
     const cas = new CAStore();
     await cas.load(resolveFixturePath('cas/*'));
-    assert.throws(
-      () => cas.verify(readCertsFromFile(cert_leaf_github)),
-      /Certificate is not trusted/,
-    );
+    assert.throws(() => cas.verify(readCertsFromFile(cert_leaf_github)), /Certificate is not trusted/);
   });
 });

@@ -11,11 +11,7 @@ import {ECDSAPrivateKey, ECDSAPublicKey} from './ecdsa';
 import {EDDSAPrivateKey, EDDSAPublicKey} from './eddsa';
 
 /** Public Key Generations **/
-export function createPublicKey(
-  algo: string | Asym<any, any>,
-  key: Buffer,
-  compress?: boolean,
-) {
+export function createPublicKey(algo: string | Asym<any, any>, key: Buffer, compress?: boolean) {
   const asym = typeof algo === 'string' ? algs.getAsym(algo) : algo;
   const type = getAsymType(asym);
 
@@ -23,10 +19,7 @@ export function createPublicKey(
     case 'rsa':
       return new RSAPublicKey(key);
     case 'ecdsa':
-      return new ECDSAPublicKey(
-        asym,
-        (<ECDSA>asym).publicKeyConvert(key, compress),
-      );
+      return new ECDSAPublicKey(asym, (<ECDSA>asym).publicKeyConvert(key, compress));
     case 'eddsa':
       return new EDDSAPublicKey(asym, key);
     default:
@@ -34,11 +27,7 @@ export function createPublicKey(
   }
 }
 
-export function createPublicKeyFromASN1(
-  algo: string | Asym<any, any>,
-  key: Buffer,
-  compress?: boolean,
-) {
+export function createPublicKeyFromASN1(algo: string | Asym<any, any>, key: Buffer, compress?: boolean) {
   return createPublicKey(algo, key, compress);
 }
 
@@ -46,9 +35,7 @@ export function createPublicKeyFromPKCS1(raw: Buffer) {
   return new RSAPublicKey(raw);
 }
 
-export function createPublicKeyFromSPKI(
-  input: Buffer | x509.SubjectPublicKeyInfo,
-) {
+export function createPublicKeyFromSPKI(input: Buffer | x509.SubjectPublicKeyInfo) {
   let spki: x509.SubjectPublicKeyInfo;
   if (Buffer.isBuffer(input)) {
     spki = <x509.SubjectPublicKeyInfo>x509.SubjectPublicKeyInfo.decode(input);
@@ -92,10 +79,7 @@ export function createPublicKeyFromPEM(data: string | Buffer) {
 }
 
 /** Private Key Generations **/
-export function createPrivateKey(
-  algo: string | Asym<any, any>,
-  key?: Buffer | null,
-): AbstractPrivateKey {
+export function createPrivateKey(algo: string | Asym<any, any>, key?: Buffer | null): AbstractPrivateKey {
   const asym = typeof algo === 'string' ? algs.getAsym(algo) : algo;
   const type = getAsymType(asym);
 
@@ -111,10 +95,7 @@ export function createPrivateKey(
   }
 }
 
-export function createPrivateKeyFromASN1(
-  algo: string | Asym<any, any>,
-  key?: Buffer | null,
-) {
+export function createPrivateKeyFromASN1(algo: string | Asym<any, any>, key?: Buffer | null) {
   const priv = createPrivateKey(algo, null);
   if (key) priv.import(key);
   return priv;
@@ -144,10 +125,7 @@ export function createPrivateKeyFromPKCS8(raw: Buffer) {
   return createPrivateKeyFromASN1(asym, pki.privateKey.value);
 }
 
-export function createPrivateKeyFromPEM(
-  data: string | Buffer,
-  passphrase?: string,
-): AbstractPrivateKey {
+export function createPrivateKeyFromPEM(data: string | Buffer, passphrase?: string): AbstractPrivateKey {
   if (Buffer.isBuffer(data)) {
     data = data.toString('utf8');
   }

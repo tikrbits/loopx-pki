@@ -1,11 +1,6 @@
 import '../setup/all';
 import {assert} from '@loopx/bsert';
-import {
-  createPrivateKey,
-  createPrivateKeyFromPEM,
-  createPublicKey,
-  createPublicKeyFromPEM,
-} from '../keys';
+import {createPrivateKey, createPrivateKeyFromPEM, createPublicKey, createPublicKeyFromPEM} from '../keys';
 import {algs} from '../algs';
 import {readFixtureAsJSON, readFixtureAsString} from './support';
 
@@ -54,10 +49,7 @@ describe('keys', function () {
   });
 
   describe('sign/verify', function () {
-    function itCurve(
-      [index, curve, priv, pub, msg, sig, hash]: any[],
-      extra: any[],
-    ) {
+    function itCurve([index, curve, priv, pub, msg, sig, hash]: any[], extra: any[]) {
       extra = extra || [];
       it(`should sign and verify (${index}) (${curve})`, () => {
         const realPriv = createPrivateKey(curve, priv);
@@ -77,20 +69,7 @@ describe('keys', function () {
       for (const [i, json] of vectors.entries()) {
         const vector = parseVector(json);
         /* eslint-disable */
-        const [
-          privRaw,
-          pubRaw,
-          hash,
-          saltLen,
-          msg,
-          sig1,
-          sig2,
-          ct1,
-          ct2,
-          ct3,
-          pkcs8,
-          spki,
-        ] = vector;
+        const [privRaw, pubRaw, hash, saltLen, msg, sig1, sig2, ct1, ct2, ct3, pkcs8, spki] = vector;
         /* eslint-enable */
 
         if (typeof hash === 'function') {

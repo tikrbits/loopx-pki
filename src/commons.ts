@@ -14,9 +14,10 @@ export const AttrNameShortToFull: Record<string, string> = {
   E: 'EMAIL',
 };
 
-export const AttrNameFullToShort: Record<string, string> = Object.keys(
-  AttrNameShortToFull,
-).reduce((o, k) => ({[k]: AttrNameShortToFull[k], ...o}), {});
+export const AttrNameFullToShort: Record<string, string> = Object.keys(AttrNameShortToFull).reduce(
+  (o, k) => ({[k]: AttrNameShortToFull[k], ...o}),
+  {},
+);
 
 export class Validity {
   notBefore: Date;
@@ -68,11 +69,7 @@ export class Attr {
   }
 
   static fromASN1(attribute: x509.Attribute) {
-    return new Attr(
-      attribute.id.toString(),
-      attribute.value.node.value,
-      attribute.value.node.constructor.name,
-    );
+    return new Attr(attribute.id.toString(), attribute.value.node.value, attribute.value.node.constructor.name);
   }
 
   valueAsASN1() {
@@ -135,11 +132,7 @@ export class RDNs extends Array<Attr> {
     filter = filter.toUpperCase();
     for (let i = 0; i < this.length; i++) {
       const item = this[i];
-      if (
-        item.id === filter ||
-        item.name === filter ||
-        item.shortName === filter
-      ) {
+      if (item.id === filter || item.name === filter || item.shortName === filter) {
         return [i, item];
       }
     }
@@ -158,8 +151,7 @@ export class RDNs extends Array<Attr> {
   add(attribute: x509.Attribute): Attr;
   add(id: string, value: any): Attr;
   add(id: string | x509.Attribute, value?: any) {
-    const attr =
-      typeof id === 'string' ? new Attr(id, value) : Attr.fromASN1(id);
+    const attr = typeof id === 'string' ? new Attr(id, value) : Attr.fromASN1(id);
     this.push(attr);
     return attr;
   }

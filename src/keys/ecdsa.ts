@@ -47,10 +47,7 @@ export class ECDSAPrivateKey extends AbstractPrivateKey {
 
   generatePublicKey(compress?: boolean): ECDSAPublicKey {
     assert(this.key);
-    return new ECDSAPublicKey(
-      this.asym,
-      this.asym.publicKeyCreate(this.key!, compress),
-    );
+    return new ECDSAPublicKey(this.asym, this.asym.publicKeyCreate(this.key!, compress));
   }
 
   import(raw: Buffer): this {

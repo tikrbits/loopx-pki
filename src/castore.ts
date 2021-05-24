@@ -43,10 +43,7 @@ export class CAStore {
   }
 
   get count() {
-    return Object.values(this.certs).reduce(
-      (num, certs) => num + certs.length,
-      0,
-    );
+    return Object.values(this.certs).reduce((num, certs) => num + certs.length, 0);
   }
 
   protected getBySubject(subject: x509.RDNSequence) {
@@ -207,10 +204,7 @@ export class CAStore {
    *
    * @return true if successful, error thrown if not.
    */
-  verify(
-    chain: Certificate | Certificate[] | string,
-    options?: VerifyOptions | VerifyCallback,
-  ): boolean {
+  verify(chain: Certificate | Certificate[] | string, options?: VerifyOptions | VerifyCallback): boolean {
     if (typeof chain === 'string') {
       chain = readCertsFromFile(chain);
     }

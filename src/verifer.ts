@@ -1,20 +1,10 @@
 import {CAStore} from './castore';
 import {Certificate} from './x509';
 import {Validity} from './commons';
-import {
-  BadCertificate,
-  CertificateExpired,
-  CertVerifyError,
-  UnknownCA,
-  UnsupportedCertificate,
-} from './errors';
+import {BadCertificate, CertificateExpired, CertVerifyError, UnknownCA, UnsupportedCertificate} from './errors';
 import {Extensions} from './extensions';
 
-export type VerifyCallback = (
-  error: CertVerifyError | undefined,
-  depth: number,
-  certs: Certificate[],
-) => boolean;
+export type VerifyCallback = (error: CertVerifyError | undefined, depth: number, certs: Certificate[]) => boolean;
 
 export interface VerifyOptions {
   verify?: VerifyCallback;
@@ -26,14 +16,11 @@ function verifyValidity(cert: Certificate, options: VerifyOptions) {
   if (date) {
     const validity = Validity.fromASN1(cert.tbsCertificate.validity);
     if (date < validity.notBefore || date > validity.notAfter) {
-      return new CertificateExpired(
-        'Certificate is not valid yet or has expired.',
-        {
-          notBefore: validity.notBefore,
-          notAfter: validity.notAfter,
-          now: date,
-        },
-      );
+      return new CertificateExpired('Certificate is not valid yet or has expired.', {
+        notBefore: validity.notBefore,
+        notAfter: validity.notAfter,
+        now: date,
+      });
     }
   }
 }
@@ -96,18 +83,12 @@ function verifyExtensions(cert: Certificate) {
   const extensions = Extensions.fromASN1(cert.tbsCertificate.extensions);
   for (const ext of extensions.items) {
     if (ext.critical && !supports.includes(ext.name)) {
-      return new UnsupportedCertificate(
-        'Certificate has an unsupported critical extension.',
-      );
+      return new UnsupportedCertificate('Certificate has an unsupported critical extension.');
     }
   }
 }
 
-export function verify(
-  store: CAStore,
-  chain: Certificate[],
-  options?: VerifyOptions | VerifyCallback,
-) {
+export function verify(store: CAStore, chain: Certificate[], options?: VerifyOptions | VerifyCallback) {
   // if a verify callback is passed as the third parameter, package it within
   // the options object. This is to support a legacy function signature that
   // expected the verify callback as the third parameter.

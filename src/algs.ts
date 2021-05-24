@@ -81,11 +81,7 @@ class Algs {
   getHashBySig(sigIdOrName: string) {
     const hash = this.findHashBySig(sigIdOrName);
     if (!hash) {
-      throw new Error(
-        `No hash found for signature algorithm: : ${
-          fname(sigIdOrName) || sigIdOrName
-        }`,
-      );
+      throw new Error(`No hash found for signature algorithm: : ${fname(sigIdOrName) || sigIdOrName}`);
     }
   }
 }

@@ -35,9 +35,7 @@ export class Extension {
   protected check(params: ExtensionParams) {
     assert(
       oids.foid(params.id) === this.id,
-      `'params.id'(${params.id}) is not match with current extension's id ${
-        (<typeof Extension>this.constructor).id
-      }`,
+      `'params.id'(${params.id}) is not match with current extension's id ${(<typeof Extension>this.constructor).id}`,
     );
   }
 
@@ -99,9 +97,7 @@ export interface KeyUsageExtensionOptions extends ExtensionOptions {
   decipherOnly?: boolean;
 }
 
-export class KeyUsageExtension
-  extends Extension
-  implements KeyUsageExtensionOptions {
+export class KeyUsageExtension extends Extension implements KeyUsageExtensionOptions {
   static id: string = oids.exts.KEY_USAGE;
 
   digitalSignature: boolean;
@@ -250,9 +246,7 @@ export interface BasicConstraintsExtensionOptions extends ExtensionOptions {
   maxPathLen?: number;
 }
 
-export class BasicConstraintsExtension
-  extends Extension
-  implements BasicConstraintsExtensionOptions {
+export class BasicConstraintsExtension extends Extension implements BasicConstraintsExtensionOptions {
   static id: string = oids.exts.BASIC_CONSTRAINTS;
 
   ca?: boolean;
@@ -274,16 +268,10 @@ export class BasicConstraintsExtension
 
 type PkixCertExtClass = typeof Extension;
 
-const PkixCertExtensionClasses: PkixCertExtClass[] = [
-  KeyUsageExtension,
-  BasicConstraintsExtension,
-];
+const PkixCertExtensionClasses: PkixCertExtClass[] = [KeyUsageExtension, BasicConstraintsExtension];
 
 export function createExtension(ext: ExtensionParams): Extension;
-export function createExtension(
-  id: string,
-  options: Buffer | asn1.OctString | Partial<ExtensionOptions>,
-): Extension;
+export function createExtension(id: string, options: Buffer | asn1.OctString | Partial<ExtensionOptions>): Extension;
 export function createExtension(
   id: string | ExtensionParams,
   options?: Buffer | asn1.OctString | Partial<ExtensionOptions>,
@@ -302,9 +290,7 @@ export function createExtension(
   }
 
   const Ext =
-    PkixCertExtensionClasses.find(
-      cls => cls.id === ext.id || cls.id === oids.foid(ext.id),
-    ) ?? GenericExtension;
+    PkixCertExtensionClasses.find(cls => cls.id === ext.id || cls.id === oids.foid(ext.id)) ?? GenericExtension;
   return new Ext(ext);
 }
 
@@ -353,9 +339,7 @@ export class Extensions {
     return this._items;
   }
 
-  add(
-    exts: Extension | Extension[] | ExtensionParams | ExtensionParams[],
-  ): void;
+  add(exts: Extension | Extension[] | ExtensionParams | ExtensionParams[]): void;
   add(id: string, options: Buffer | Partial<ExtensionOptions>): void;
   add(
     id: string | Extension | Extension[] | ExtensionParams | ExtensionParams[],

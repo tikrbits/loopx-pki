@@ -18,11 +18,7 @@ export class RSAPublicKey extends AbstractPublicKey {
   }
 
   toSPKI(): Buffer {
-    return new x509.SubjectPublicKeyInfo(
-      oids.keyAlgs.RSA,
-      new asn1.Null(),
-      this.key,
-    ).encode();
+    return new x509.SubjectPublicKeyInfo(oids.keyAlgs.RSA, new asn1.Null(), this.key).encode();
   }
 }
 
@@ -58,25 +54,10 @@ export class RSAPrivateKey extends AbstractPrivateKey {
   export(): Buffer {
     assert(this.key);
     const key = this.asym.privateKeyExport(this.key!);
-    return new pkcs1.RSAPrivateKey(
-      0,
-      key.n,
-      key.e,
-      key.d,
-      key.p,
-      key.q,
-      key.dp,
-      key.dq,
-      key.qi,
-    ).encode();
+    return new pkcs1.RSAPrivateKey(0, key.n, key.e, key.d, key.p, key.q, key.dp, key.dq, key.qi).encode();
   }
 
   toPKCS8() {
-    return new pkcs8.PrivateKeyInfo(
-      0,
-      oids.keyAlgs.RSA,
-      new asn1.Null(),
-      this.export(),
-    ).encode();
+    return new pkcs8.PrivateKeyInfo(0, oids.keyAlgs.RSA, new asn1.Null(), this.export()).encode();
   }
 }
