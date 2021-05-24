@@ -49,27 +49,27 @@
     "unit": "lb-mocha \"dist/__tests__/unit/**/*.js\""
   },
   "dependencies": {
-    "@loopx/bufio": "^1.2.1",
-    "@loopx/crypto": "^1.0.1",
-    "fast-glob": "^3.2.4",
-    "tslib": "^2.0.3"
+    "@loopx/bufio": "^1.2.2",
+    "@loopx/crypto": "^1.1.1",
+    "fast-glob": "^3.2.5",
+    "tslib": "^2.2.0"
   },
   "devDependencies": {
+    "@loopback/build": "^6.4.0",
+    "@loopback/eslint-config": "^10.2.0",
+    "@loopback/testlab": "^3.4.0",
     "@loopx/bsert": "^0.3.0",
-    "@loopback/build": "^6.2.5",
-    "@loopback/eslint-config": "^10.0.1",
-    "@loopback/testlab": "^3.2.7",
-    "@types/mocha": "^8.0.3",
-    "@types/node": "^14.14.6",
+    "@types/mocha": "^8.2.2",
+    "@types/node": "^15.6.0",
+    "@typescript-eslint/eslint-plugin": "^4.24.0",
+    "@typescript-eslint/parser": "^4.24.0",
     "cpx2": "^3.0.0",
-    "@typescript-eslint/eslint-plugin": "^4.6.0",
-    "@typescript-eslint/parser": "^4.6.0",
-    "cross-env": "^7.0.2",
-    "eslint": "^7.12.1",
-    "eslint-plugin-mocha": "^8.0.0",
-    "mocha": "^8.2.0",
-    "np": "^7.0.0",
-    "typescript": "^4.0.5"
+    "cross-env": "^7.0.3",
+    "eslint": "^7.27.0",
+    "eslint-plugin-mocha": "^8.1.0",
+    "mocha": "^8.4.0",
+    "np": "^7.5.0",
+    "typescript": "^4.2.4"
   },
   "files": [
     "README.md",
